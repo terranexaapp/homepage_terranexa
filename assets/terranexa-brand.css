@@ -38,6 +38,18 @@
   max-width: 760px;
 }
 
+.hero-description {
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+.hero-description::after {
+  content: "Gest\00e3o de talh\00f5es, opera\00e7\00f5es agr\00edcolas, monitoramento e solo em uma \00fanica plataforma. Registre e edite informa\00e7\00f5es no campo offline, com sincroniza\00e7\00e3o quando houver conex\00e3o.";
+  display: block;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.55;
+}
+
 @media (max-width: 900px) {
   .brand img,
   .footer-brand img {
