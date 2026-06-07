@@ -1,3 +1,30 @@
+const officialIconHref = "assets/terranexa-icon.svg"
+const officialLogoHref = "assets/terranexa-logo-wordmark.svg"
+
+function applyOfficialBrandAssets() {
+  const favicon = document.querySelector('link[rel="icon"]')
+
+  if (favicon) {
+    favicon.setAttribute("href", officialIconHref)
+    favicon.setAttribute("type", "image/svg+xml")
+  } else {
+    const iconLink = document.createElement("link")
+    iconLink.setAttribute("rel", "icon")
+    iconLink.setAttribute("type", "image/svg+xml")
+    iconLink.setAttribute("href", officialIconHref)
+    document.head.appendChild(iconLink)
+  }
+
+  const brandImage = document.querySelector(".brand img")
+
+  if (brandImage) {
+    brandImage.setAttribute("src", officialLogoHref)
+    brandImage.setAttribute("alt", "TerraNexa")
+  }
+}
+
+applyOfficialBrandAssets()
+
 const header = document.querySelector("[data-header]")
 const menuToggle = document.querySelector("[data-menu-toggle]")
 const navigation = document.querySelector("[data-navigation]")
