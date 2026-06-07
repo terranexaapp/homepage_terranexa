@@ -44,7 +44,7 @@
 }
 
 .hero-description::after {
-  content: "Gest\00e3o de talh\00f5es, opera\00e7\00f5es agr\00edcolas, monitoramento e solo em uma \00fanica plataforma. Registre e edite informa\00e7\00f5es no campo offline, com sincroniza\00e7\00e3o quando houver conex\00e3o.";
+  content: "Gest\00e3 o de talh\00f5 es, opera\00e7 \00f5 es agr\00ed colas, monitoramento e solo em uma \00fa nica plataforma. Registre e edite informa\00e7 \00f5 es no campo offline, com sincroniza\00e7 \00e3 o quando houver conex\00e3 o.";
   display: block;
   font-size: clamp(18px, 2vw, 22px);
   line-height: 1.55;
