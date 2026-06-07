@@ -24,8 +24,18 @@
   min-width: var(--tnx-logo-width-desktop);
 }
 
-.hero .eyebrow {
+.hero .eyebrow,
+.hero-insights {
   display: none !important;
+}
+
+.hero-layout {
+  grid-template-columns: minmax(0, 760px) !important;
+  justify-content: start !important;
+}
+
+.hero-copy {
+  max-width: 760px;
 }
 
 @media (max-width: 900px) {
@@ -36,5 +46,9 @@
 
   .site-header .brand {
     min-width: var(--tnx-logo-width-mobile);
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr !important;
   }
 }
