@@ -1,0 +1,36 @@
+:root {
+  --tnx-logo-width-desktop: 198px;
+  --tnx-logo-width-mobile: 164px;
+}
+
+.brand img,
+.footer-brand img {
+  display: block;
+  width: var(--tnx-logo-width-desktop);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.brand img[src$="terranexa-logo-wordmark.svg"],
+.footer-brand img[src$="terranexa-logo-wordmark.svg"] {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+}
+
+.site-header .brand {
+  display: inline-flex;
+  align-items: center;
+  min-width: var(--tnx-logo-width-desktop);
+}
+
+@media (max-width: 900px) {
+  .brand img,
+  .footer-brand img {
+    width: var(--tnx-logo-width-mobile);
+  }
+
+  .site-header .brand {
+    min-width: var(--tnx-logo-width-mobile);
+  }
+}
