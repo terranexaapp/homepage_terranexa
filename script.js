@@ -1,29 +1,23 @@
-const officialIconHref = "assets/terranexa-icon.svg"
-const officialLogoHref = "assets/terranexa-logo-wordmark.svg"
+const TNX_BRAND_CSS = "assets/terranexa-brand.css"
+const TNX_BRAND_JS = "assets/terranexa-brand.js"
 
-function applyOfficialBrandAssets() {
-  const favicon = document.querySelector('link[rel="icon"]')
-
-  if (favicon) {
-    favicon.setAttribute("href", officialIconHref)
-    favicon.setAttribute("type", "image/svg+xml")
-  } else {
-    const iconLink = document.createElement("link")
-    iconLink.setAttribute("rel", "icon")
-    iconLink.setAttribute("type", "image/svg+xml")
-    iconLink.setAttribute("href", officialIconHref)
-    document.head.appendChild(iconLink)
+function loadTerraNexaBrandLayer() {
+  if (!document.querySelector(`link[href="${TNX_BRAND_CSS}"]`)) {
+    const brandCss = document.createElement("link")
+    brandCss.rel = "stylesheet"
+    brandCss.href = TNX_BRAND_CSS
+    document.head.appendChild(brandCss)
   }
 
-  const brandImage = document.querySelector(".brand img")
-
-  if (brandImage) {
-    brandImage.setAttribute("src", officialLogoHref)
-    brandImage.setAttribute("alt", "TerraNexa")
+  if (!document.querySelector(`script[src="${TNX_BRAND_JS}"]`)) {
+    const brandScript = document.createElement("script")
+    brandScript.src = TNX_BRAND_JS
+    brandScript.defer = true
+    document.head.appendChild(brandScript)
   }
 }
 
-applyOfficialBrandAssets()
+loadTerraNexaBrandLayer()
 
 const header = document.querySelector("[data-header]")
 const menuToggle = document.querySelector("[data-menu-toggle]")
