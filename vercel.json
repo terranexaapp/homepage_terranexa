@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/login",
-      "destination": "https://terranexa.com.br/login",
+      "destination": "https://app.terranexa.com.br/login",
       "permanent": false
     }
   ]
