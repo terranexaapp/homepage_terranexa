@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/login",
+      "destination": "https://terranexa.com.br/login",
+      "permanent": false
+    }
+  ]
+}
