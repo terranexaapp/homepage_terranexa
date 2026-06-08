@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Semantic status" subtitle="Danger & info, used sparingly over the green base" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-bg); font-family: var(--tnx-sans); padding: 22px; }
+      .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+      .sw { border-radius: var(--tnx-radius-md); border: 1px solid var(--tnx-line); height: 78px; }
+      .meta { margin-top: 9px; color: var(--tnx-text); }
+      .meta b { display: block; font-size: 12px; font-weight: 700; }
+      .meta span { display: block; font-size: 11px; color: var(--tnx-muted); font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div><div class="sw" style="background: var(--tnx-danger)"></div><div class="meta"><b>Danger</b><span>#E85A3A</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-danger-light)"></div><div class="meta"><b>Danger soft</b><span>#FBE0D8</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-info)"></div><div class="meta"><b>Info</b><span>#4A8AB8</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-info-light)"></div><div class="meta"><b>Info soft</b><span>#E0EEF6</span></div></div>
+    </div>
+  </body>
+</html>

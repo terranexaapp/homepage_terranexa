@@ -1,0 +1,24 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Shadows & glow" subtitle="Deep float for cards; colored glows under buttons" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-bg); font-family: var(--tnx-sans); padding: 30px 24px; }
+      .row { display: flex; gap: 26px; }
+      .col { display: grid; gap: 12px; justify-items: center; }
+      .box { width: 150px; height: 70px; border-radius: var(--tnx-radius-lg); background: var(--tnx-surface); border: 1px solid var(--tnx-line); }
+      .green { background: linear-gradient(180deg, var(--tnx-green), var(--tnx-green-strong)); border: none; box-shadow: var(--tnx-shadow-green); }
+      .gold { background: linear-gradient(135deg, var(--tnx-gold-light), var(--tnx-gold-deep)); border: none; box-shadow: var(--tnx-shadow-gold); }
+      .col span { color: var(--tnx-muted); font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col"><div class="box" style="box-shadow: var(--tnx-shadow)"></div><span>--tnx-shadow</span></div>
+      <div class="col"><div class="box green"></div><span>--tnx-shadow-green</span></div>
+      <div class="col"><div class="box gold"></div><span>--tnx-shadow-gold</span></div>
+    </div>
+  </body>
+</html>

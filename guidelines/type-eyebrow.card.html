@@ -1,0 +1,28 @@
+<!-- @dsCard group="Type" viewport="700x140" name="Eyebrow labels" subtitle="Uppercase, wide-tracked, green or gold" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-bg); font-family: var(--tnx-sans); padding: 26px 24px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+      .eyebrow {
+        display: inline-flex; align-items: center; gap: 10px;
+        border: 1px solid rgba(116, 202, 69, 0.28);
+        border-radius: var(--tnx-radius-pill);
+        background: rgba(116, 202, 69, 0.1);
+        padding: 10px 14px;
+        color: var(--tnx-green);
+        font-size: 12px; font-weight: 900; letter-spacing: var(--tnx-track-eyebrow); text-transform: uppercase;
+      }
+      .eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: var(--tnx-green); box-shadow: 0 0 18px rgba(116,202,69,0.75); }
+      .label { color: var(--tnx-green); font-size: 12px; font-weight: 900; letter-spacing: var(--tnx-track-eyebrow); text-transform: uppercase; }
+      .gold { color: var(--tnx-gold); }
+    </style>
+  </head>
+  <body>
+    <p class="eyebrow"><span></span> Plataforma agrotech integrada</p>
+    <p class="label">Do campo ao controle</p>
+    <p class="label gold">Gestão que gera resultado</p>
+  </body>
+</html>

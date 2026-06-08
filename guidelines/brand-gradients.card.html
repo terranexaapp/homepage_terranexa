@@ -1,0 +1,24 @@
+<!-- @dsCard group="Brand" viewport="700x150" name="Signature gradients" subtitle="Vertical green CTA · diagonal gold CTA · radial green glow" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-bg); font-family: var(--tnx-sans); padding: 22px; }
+      .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .g { height: 84px; border-radius: var(--tnx-radius-lg); }
+      .green { background: linear-gradient(180deg, var(--tnx-green), var(--tnx-green-strong)); }
+      .gold { background: linear-gradient(135deg, var(--tnx-gold-light), var(--tnx-gold-deep)); }
+      .glow { background: radial-gradient(circle at 50% 35%, rgba(72,155,47,0.55), var(--tnx-bg-alt) 70%); border: 1px solid var(--tnx-line); }
+      .meta { margin-top: 8px; color: var(--tnx-muted); font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div><div class="g green"></div><p class="meta">Primary CTA · 180°</p></div>
+      <div><div class="g gold"></div><p class="meta">Gold CTA · 135°</p></div>
+      <div><div class="g glow"></div><p class="meta">Ambient glow · radial</p></div>
+    </div>
+  </body>
+</html>

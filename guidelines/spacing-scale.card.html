@@ -1,0 +1,27 @@
+<!-- @dsCard group="Spacing" viewport="700x140" name="Spacing scale" subtitle="4px base — 4 / 8 / 12 / 16 / 24 / 32 / 40 / 56" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-bg); font-family: var(--tnx-sans); padding: 26px 24px; }
+      .row { display: flex; align-items: flex-end; gap: 16px; }
+      .col { display: grid; gap: 8px; justify-items: center; }
+      .bar { background: var(--tnx-green); border-radius: 3px; width: 100%; }
+      .col span { color: var(--tnx-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-1)"></div><span>4</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-2)"></div><span>8</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-3)"></div><span>12</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-4)"></div><span>16</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-5)"></div><span>24</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-6)"></div><span>32</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-7)"></div><span>40</span></div>
+      <div class="col" style="width: 36px"><div class="bar" style="height: var(--tnx-space-8)"></div><span>56</span></div>
+    </div>
+  </body>
+</html>
