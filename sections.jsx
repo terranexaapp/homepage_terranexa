@@ -32,7 +32,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
           <a href="#contato">Contato</a>
         </nav>
         <div className="header-actions">
-          <a className="button button-ghost button-small" href="#" onClick={(e) => e.preventDefault()}>Entrar</a>
+          <a className="button button-ghost button-small" href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Entrar</a>
           <button className="button button-gold button-small" onClick={onDemo}>Solicitar demonstração</button>
         </div>
       </div>
