@@ -1,22 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 220" role="img" aria-label="TerraNexa — Gestão do Campo">
-  <!-- Icon circle -->
-  <circle cx="110" cy="110" r="96" fill="none" stroke="white" stroke-width="7"/>
-  <!-- T bar -->
-  <rect x="52" y="52" width="116" height="21" rx="10.5" fill="white"/>
-  <!-- T stem -->
-  <rect x="99.5" y="52" width="21" height="90" rx="10.5" fill="white"/>
-  <!-- Dashed horizontal line -->
-  <line x1="52" y1="147" x2="168" y2="147" stroke="white" stroke-width="3.5" stroke-dasharray="9,7" opacity="0.6"/>
-  <!-- Branches -->
-  <path d="M110 145 L68 192" stroke="white" stroke-width="9" stroke-linecap="round" fill="none"/>
-  <path d="M110 145 L110 196" stroke="white" stroke-width="9" stroke-linecap="round" fill="none"/>
-  <path d="M110 145 L152 192" stroke="white" stroke-width="9" stroke-linecap="round" fill="none"/>
-  <!-- Root dots -->
-  <circle cx="68"  cy="192" r="8" fill="white"/>
-  <circle cx="110" cy="196" r="8" fill="white"/>
-  <circle cx="152" cy="192" r="8" fill="white"/>
+  <!-- Icon: scaled from original 512x512 to 220x220 -->
+  <g transform="scale(0.43)">
+    <!-- Circle outline only (no fill) -->
+    <circle cx="256" cy="256" r="236" fill="none" stroke="white" stroke-width="14"/>
+    <!-- T shape (exact original path) -->
+    <path d="M151 114h210c15.5 0 28 12.5 28 28s-12.5 28-28 28h-76v142c0 16-13 29-29 29s-29-13-29-29V170h-76c-15.5 0-28-12.5-28-28s12.5-28 28-28Z" fill="white"/>
+    <!-- Dashes (soil level) -->
+    <path d="M143 259h16v9h-16v-9Zm33 0h16v9h-16v-9Zm33 0h16v9h-16v-9Zm33 0h16v9h-16v-9Zm33 0h16v9h-16v-9Zm33 0h16v9h-16v-9Zm33 0h16v9h-16v-9Zm33 0h16v9h-16v-9Z" fill="white" opacity="0.45"/>
+    <!-- Main branches -->
+    <path d="M256 254c-36 31-69 67-99 110" fill="none" stroke="white" stroke-width="22" stroke-linecap="round"/>
+    <path d="M256 254c36 31 69 67 99 110"  fill="none" stroke="white" stroke-width="22" stroke-linecap="round"/>
+    <path d="M256 254v118"                  fill="none" stroke="white" stroke-width="22" stroke-linecap="round"/>
+    <!-- Root dots -->
+    <circle cx="145" cy="374" r="22" fill="white"/>
+    <circle cx="256" cy="389" r="22" fill="white"/>
+    <circle cx="367" cy="374" r="22" fill="white"/>
+  </g>
   <!-- TerraNexa wordmark -->
-  <text x="236" y="140" font-family="Georgia,'Times New Roman',serif" font-size="118" font-weight="800" letter-spacing="-4" fill="white">TerraNexa</text>
+  <text x="242" y="138" font-family="Georgia,'Times New Roman',serif" font-size="116" font-weight="800" letter-spacing="-4" fill="white">TerraNexa</text>
   <!-- Tagline -->
-  <text x="242" y="182" font-family="Georgia,'Times New Roman',serif" font-size="24" letter-spacing="11" fill="rgba(255,255,255,0.55)">GESTÃO DO CAMPO</text>
+  <text x="248" y="180" font-family="Georgia,'Times New Roman',serif" font-size="22" letter-spacing="12" fill="rgba(255,255,255,0.55)">GESTÃO DO CAMPO</text>
 </svg>
