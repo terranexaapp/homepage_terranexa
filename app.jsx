@@ -131,7 +131,7 @@ function App() {
         <Results />
         <DemoCTA onDemo={openDemo} />
       </main>
-      <Footer />
+      <Footer onDemo={openDemo} />
       <DemoDialog open={demoOpen} onClose={() => setDemoOpen(false)} />
     </React.Fragment>
   );
