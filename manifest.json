@@ -6,37 +6,37 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#07130b",
-  "theme_color": "#07130b",
+  "background_color": "#0F1F0D",
+  "theme_color": "#0F1F0D",
   "icons": [
     {
-      "src": "/icons/icon-16x16.png",
+      "src": "/icons/terranexa-icon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-32x32.png",
+      "src": "/icons/terranexa-icon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-48x48.png",
+      "src": "/icons/terranexa-icon-48x48.png",
       "sizes": "48x48",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-180x180.png",
+      "src": "/icons/terranexa-icon-180x180.png",
       "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icons/terranexa-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/icons/terranexa-icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
