@@ -1,0 +1,71 @@
+/* ============================================================
+   TerraNexa · Color tokens
+   Extracted from the marketing site (dark theme) and the app
+   (light theme). The brand is built on a deep-forest green base
+   with a vivid leaf-green primary and a harvest-gold accent.
+   ============================================================ */
+
+:root {
+  /* ---- Brand greens ---- */
+  --tnx-green: #74ca45;          /* primary leaf green — CTAs, accents, links */
+  --tnx-green-strong: #3d8a22;   /* deeper green — gradients, pressed states */
+  --tnx-green-dark: #1f5f26;     /* darkest green — logo field, depth */
+  --tnx-green-light: #e8f4dc;    /* pale wash — light-theme fills */
+
+  /* ---- Harvest gold (secondary accent) ---- */
+  --tnx-gold: #e8a84c;           /* harvest gold — secondary CTAs, "Nexa" */
+  --tnx-gold-light: #f1cb76;     /* lighter gold — gradient top stop */
+  --tnx-gold-deep: #d99128;      /* deeper gold — gradient bottom stop */
+
+  /* ---- Soil (earthy support tone, from app) ---- */
+  --tnx-soil: #a0714f;
+  --tnx-soil-dark: #7a5238;
+  --tnx-soil-light: #f2e4d6;
+
+  /* ---- Dark-theme surfaces (marketing site) ---- */
+  --tnx-bg: #07130b;             /* page background — near-black forest */
+  --tnx-bg-alt: #0a1810;         /* alternating section background */
+  --tnx-surface: #0e2116;        /* raised surface */
+  --tnx-surface-soft: #132a1b;   /* softer raised surface */
+  --tnx-surface-card: linear-gradient(145deg, #102419, #0b1b11); /* module card */
+
+  /* ---- Text (on dark) ---- */
+  --tnx-text: #f7faf5;           /* primary text */
+  --tnx-text-soft: #d7e0d8;      /* body copy on dark */
+  --tnx-muted: #a8b8ac;          /* muted / captions */
+  --tnx-faint: #77877b;          /* footnotes, legal */
+
+  /* ---- Light-theme tokens (app product) ---- */
+  --tnx-l-bg: #ffffff;
+  --tnx-l-menu: #f7faf2;
+  --tnx-l-border: #e5e7eb;
+  --tnx-l-border-soft: #f1f5f9;
+  --tnx-l-text: #1a3a0a;         /* deep green ink */
+  --tnx-l-text-mid: #5a6a40;
+  --tnx-l-text-dim: #8a9070;
+
+  /* ---- Semantic status ---- */
+  --tnx-danger: #e85a3a;
+  --tnx-danger-light: #fbe0d8;
+  --tnx-info: #4a8ab8;
+  --tnx-info-light: #e0eef6;
+
+  /* ---- Lines & hairlines ---- */
+  --tnx-line: rgba(255, 255, 255, 0.11);   /* hairline on dark */
+  --tnx-line-strong: rgba(255, 255, 255, 0.16);
+  --tnx-tint-green: rgba(116, 202, 69, 0.12); /* green glass fill */
+
+  /* ============================================================
+     Semantic aliases — prefer these in components
+     ============================================================ */
+  --color-primary: var(--tnx-green);
+  --color-primary-strong: var(--tnx-green-strong);
+  --color-accent: var(--tnx-gold);
+  --surface-page: var(--tnx-bg);
+  --surface-alt: var(--tnx-bg-alt);
+  --surface-card: var(--tnx-surface);
+  --text-strong: var(--tnx-text);
+  --text-body: var(--tnx-text-soft);
+  --text-muted: var(--tnx-muted);
+  --border-hairline: var(--tnx-line);
+}

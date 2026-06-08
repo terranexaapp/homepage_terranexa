@@ -1,0 +1,30 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Corner radii" subtitle="10 → 14 → 20 → 28 → 34 → pill" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-bg); font-family: var(--tnx-sans); padding: 24px; }
+      .row { display: flex; gap: 16px; align-items: flex-end; }
+      .col { display: grid; gap: 9px; justify-items: center; }
+      .box {
+        width: 74px; height: 60px;
+        background: var(--tnx-surface);
+        border: 1px solid var(--tnx-green);
+        border-bottom: none; border-right: none;
+      }
+      .col span { color: var(--tnx-muted); font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col"><div class="box" style="border-top-left-radius: var(--tnx-radius-sm)"></div><span>sm · 10</span></div>
+      <div class="col"><div class="box" style="border-top-left-radius: var(--tnx-radius-md)"></div><span>md · 14</span></div>
+      <div class="col"><div class="box" style="border-top-left-radius: var(--tnx-radius-lg)"></div><span>lg · 20</span></div>
+      <div class="col"><div class="box" style="border-top-left-radius: var(--tnx-radius-xl)"></div><span>xl · 28</span></div>
+      <div class="col"><div class="box" style="border-top-left-radius: var(--tnx-radius-2xl)"></div><span>2xl · 34</span></div>
+      <div class="col"><div class="box" style="border-radius: var(--tnx-radius-pill)"></div><span>pill</span></div>
+    </div>
+  </body>
+</html>

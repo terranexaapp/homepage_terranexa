@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 230" role="img" aria-label="TerraNexa">
   <defs>
     <linearGradient id="terra" x1="54" y1="38" x2="450" y2="190" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#86d74f"/>
-      <stop offset="0.55" stop-color="#62bd3f"/>
-      <stop offset="1" stop-color="#3b942e"/>
+      <stop offset="0" stop-color="#86d74f"></stop>
+      <stop offset="0.55" stop-color="#62bd3f"></stop>
+      <stop offset="1" stop-color="#3b942e"></stop>
     </linearGradient>
     <linearGradient id="nexa" x1="478" y1="38" x2="900" y2="190" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f3bd58"/>
-      <stop offset="0.55" stop-color="#eda842"/>
-      <stop offset="1" stop-color="#d98f30"/>
+      <stop offset="0" stop-color="#f3bd58"></stop>
+      <stop offset="0.55" stop-color="#eda842"></stop>
+      <stop offset="1" stop-color="#d98f30"></stop>
     </linearGradient>
     <filter id="depth" x="-8%" y="-20%" width="116%" height="150%">
-      <feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.18"></feDropShadow>
     </filter>
   </defs>
-  <rect width="960" height="230" fill="none"/>
-  <g filter="url(#depth)" font-family="Georgia, 'Times New Roman', serif" font-size="132" font-weight="800" letter-spacing="-6">
+  <rect width="960" height="230" fill="none"></rect>
+  <g filter="url(#depth)" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="132" font-weight="800" letter-spacing="-6">
     <text x="42" y="154" fill="url(#terra)">Terra</text>
     <text x="445" y="154" fill="url(#nexa)">Nexa</text>
   </g>

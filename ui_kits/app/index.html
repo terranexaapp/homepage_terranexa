@@ -1,13 +1,17 @@
+<!-- @dsCard group="App" viewport="414x844" name="App — produto (mobile)" subtitle="Fluxo do app: Fazendas, Mapa, Monitoramento e Ordens de Serviço" -->
+<!-- @startingPoint section="App" subtitle="TerraNexa app produto — fluxo mobile (tema claro)" viewport="414x844" -->
 <!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="TerraNexa: gestão agrícola inteligente para conectar mapas, ordens de serviço, monitoramento, solo, custos e equipes." />
-    <meta name="theme-color" content="#07130b" />
-    <title>TerraNexa | Gestão agrícola inteligente</title>
-    <link rel="icon" href="assets/terranexa-icon.svg" />
-    <link rel="stylesheet" href="styles.css" />
+    <title>TerraNexa | App</title>
+    <link rel="icon" href="../../assets/terranexa-icon.svg" />
+    <link rel="stylesheet" href="app.css" />
+    <style>
+      body { margin: 0; background: #dfe6d6; display: grid; place-items: center; min-height: 100vh; }
+      @media (max-width: 460px) { body { background: #fff; } .tnx-phone { width: 100vw !important; height: 100dvh !important; } }
+    </style>
   </head>
   <body>
     <div id="root"></div>
@@ -17,7 +21,9 @@
     <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
     <script type="text/babel" data-presets="react" src="icons.jsx"></script>
-    <script type="text/babel" data-presets="react" src="sections.jsx"></script>
+    <script type="text/babel" data-presets="react" src="screens.jsx"></script>
+    <script type="text/babel" data-presets="react" src="screens2.jsx"></script>
+    <script type="text/babel" data-presets="react" src="screens3.jsx"></script>
     <script type="text/babel" data-presets="react" src="app.jsx"></script>
   </body>
 </html>

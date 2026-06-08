@@ -1,0 +1,119 @@
+/* ============================================================
+   TerraNexa — App (product) light theme. Self-contained.
+   Faithful to src/styles/theme.js (theme.normal) + global.css.
+   Body is Georgia serif; labels are monospace uppercase; nav is
+   system-ui. No external fonts required.
+   ============================================================ */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f7faf2;
+  --menu: #f7faf2;
+  --border: #e5e7eb;
+  --border-soft: #f1f5f9;
+
+  --green: #7ec850;
+  --green-dk: #5aae38;
+  --green-dp: #3d8a22;
+  --green-light: #e8f4dc;
+
+  --amber: #e8a84c;
+  --amber-dk: #c4881c;
+  --amber-light: #fbefd8;
+
+  --soil: #a0714f;
+  --soil-dk: #7a5238;
+
+  --text-dk: #1a3a0a;
+  --text-mid: #5a6a40;
+  --text-dim: #8a9070;
+
+  --red: #e85a3a;
+  --red-light: #fbe0d8;
+  --red-dk: #b83820;
+
+  --blue: #4a8ab8;
+
+  --serif: Georgia, "Times New Roman", serif;
+  --mono: "SF Mono", "Menlo", Monaco, "Courier New", monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+.tnx-app {
+  font-family: var(--serif);
+  color: var(--text-dk);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tnx-app button,
+.tnx-app input,
+.tnx-app select { font-family: inherit; }
+.tnx-app button { cursor: pointer; }
+
+/* Mono uppercase label — the app's signature for field/stat labels. */
+.tnx-eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  font-weight: 800;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* Satellite-style map backdrops (lifted from the app's CSS gradients). */
+.tnx-map-scouting {
+  background:
+    linear-gradient(135deg, rgba(10, 35, 24, 0.98), rgba(56, 82, 45, 0.95)),
+    repeating-linear-gradient(28deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 64px);
+}
+.tnx-map-aerial {
+  background:
+    linear-gradient(118deg, #6f7d3f 0%, #6f7d3f 46%, #7c6a48 46%, #8a6f4a 100%),
+    repeating-linear-gradient(28deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 58px);
+}
+.tnx-map-rain {
+  background:
+    radial-gradient(circle at 28% 42%, rgba(70, 158, 205, 0.9), transparent 22%),
+    radial-gradient(circle at 60% 36%, rgba(232, 168, 76, 0.78), transparent 18%),
+    radial-gradient(circle at 46% 54%, rgba(70, 120, 205, 0.8), transparent 24%),
+    linear-gradient(135deg, rgba(61, 138, 34, 0.82), rgba(18, 73, 37, 0.92)),
+    repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 56px);
+}
+
+/* Soil fertility tint (mostly "Alto" green parcels) over the aerial map */
+.tnx-soil-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 60%, rgba(143, 207, 100, 0.5), transparent 26%),
+    radial-gradient(circle at 18% 78%, rgba(241, 217, 122, 0.42), transparent 18%),
+    linear-gradient(135deg, rgba(31, 122, 52, 0.62), rgba(31, 122, 52, 0.4) 55%, rgba(124, 106, 72, 0.2));
+  pointer-events: none;
+}
+
+/* Thin app scrollbars */
+.tnx-app ::-webkit-scrollbar { width: 6px; height: 6px; }
+.tnx-app ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+
+/* Phone shell for the kit preview */
+.tnx-phone {
+  width: 414px;
+  height: 844px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  border-radius: 0;
+}
+.tnx-screen {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}

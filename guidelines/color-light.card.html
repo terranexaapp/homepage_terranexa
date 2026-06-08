@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" viewport="700x160" name="Light theme (app)" subtitle="The product app runs a light, green-ink palette" -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body { margin: 0; background: var(--tnx-l-bg); font-family: var(--tnx-sans); padding: 22px; }
+      .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+      .sw { border-radius: var(--tnx-radius-md); border: 1px solid var(--tnx-l-border); height: 78px; }
+      .meta { margin-top: 9px; color: var(--tnx-l-text); }
+      .meta b { display: block; font-size: 12px; font-weight: 700; }
+      .meta span { display: block; font-size: 11px; color: var(--tnx-l-text-dim); font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div><div class="sw" style="background: var(--tnx-l-bg)"></div><div class="meta"><b>BG</b><span>#FFFFFF</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-l-menu)"></div><div class="meta"><b>Menu</b><span>#F7FAF2</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-green-light)"></div><div class="meta"><b>Green fill</b><span>#E8F4DC</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-l-text)"></div><div class="meta"><b>Ink</b><span>#1A3A0A</span></div></div>
+      <div><div class="sw" style="background: var(--tnx-l-text-mid)"></div><div class="meta"><b>Ink mid</b><span>#5A6A40</span></div></div>
+    </div>
+  </body>
+</html>
