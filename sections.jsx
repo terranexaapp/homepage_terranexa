@@ -229,7 +229,7 @@ function DemoCTA({ onDemo }) {
 }
 
 /* ---------------- Footer ---------------- */
-function Footer() {
+function Footer({ onDemo }) {
   return (
     <footer className="site-footer" id="contato">
       <div className="container footer-grid">
@@ -245,9 +245,9 @@ function Footer() {
         </div>
         <div>
           <strong>Contato</strong>
-          <a href="#">contato@terranexa.com.br</a>
-          <a href="#demonstracao">Solicitar demonstração</a>
-          <a href="#">Acessar plataforma</a>
+          <a href="mailto:contato@terranexa.com.br">contato@terranexa.com.br</a>
+          <a href="#demonstracao" onClick={(e) => { e.preventDefault(); onDemo(); }}>Solicitar demonstração</a>
+          <a href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Acessar plataforma</a>
         </div>
       </div>
       <div className="container footer-bottom">
