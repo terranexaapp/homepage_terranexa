@@ -217,7 +217,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 /* Footer */
 .site-footer { border-top: 1px solid var(--line); background: #050e08; padding: 70px 0 26px; }
 .footer-grid { display: grid; grid-template-columns: 1fr 220px 260px; gap: 70px; }
-.footer-brand img { width: 280px; filter: brightness(0) invert(1); }
+.footer-brand img { width: 280px; }
 .footer-brand p { max-width: 420px; margin: 22px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .footer-grid > div:not(.footer-brand) { display: grid; align-content: start; gap: 13px; }
 .footer-grid strong { margin-bottom: 8px; font-family: var(--serif); font-size: 18px; }

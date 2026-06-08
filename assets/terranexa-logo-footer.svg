@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 220" role="img" aria-label="TerraNexa — Gestão do Campo">
+  <!-- Icon circle -->
+  <circle cx="110" cy="110" r="96" fill="none" stroke="white" stroke-width="7"/>
+  <!-- T bar -->
+  <rect x="52" y="52" width="116" height="21" rx="10.5" fill="white"/>
+  <!-- T stem -->
+  <rect x="99.5" y="52" width="21" height="90" rx="10.5" fill="white"/>
+  <!-- Dashed horizontal line -->
+  <line x1="52" y1="147" x2="168" y2="147" stroke="white" stroke-width="3.5" stroke-dasharray="9,7" opacity="0.6"/>
+  <!-- Branches -->
+  <path d="M110 145 L68 192" stroke="white" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <path d="M110 145 L110 196" stroke="white" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <path d="M110 145 L152 192" stroke="white" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <!-- Root dots -->
+  <circle cx="68"  cy="192" r="8" fill="white"/>
+  <circle cx="110" cy="196" r="8" fill="white"/>
+  <circle cx="152" cy="192" r="8" fill="white"/>
+  <!-- TerraNexa wordmark -->
+  <text x="236" y="140" font-family="Georgia,'Times New Roman',serif" font-size="118" font-weight="800" letter-spacing="-4" fill="white">TerraNexa</text>
+  <!-- Tagline -->
+  <text x="242" y="182" font-family="Georgia,'Times New Roman',serif" font-size="24" letter-spacing="11" fill="rgba(255,255,255,0.55)">GESTÃO DO CAMPO</text>
+</svg>

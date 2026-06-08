@@ -3,7 +3,7 @@
 (function () {
 const { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers } = window.TNXIcons;
 
-const LOGO = "assets/logo-terranexa.png";
+const LOGO = "assets/terranexa-logo-footer.svg";
 
 /* ---------------- Header ---------------- */
 function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDemo }) {
