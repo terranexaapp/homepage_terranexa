@@ -66,6 +66,7 @@ export default function CookieConsent() {
       setPrefsOpen(true);
     };
     window.addEventListener("tnx:cookie-prefs", open);
+    if (window.location.hash === "#preferencias-cookies") open();
     return () => window.removeEventListener("tnx:cookie-prefs", open);
   }, []);
 
@@ -82,7 +83,7 @@ export default function CookieConsent() {
         <div className="cookie-banner" role="region" aria-label="Aviso de cookies">
           <div className="cookie-banner-body">
             <strong>Sua privacidade no campo digital</strong>
-            <p>Usamos cookies para o funcionamento do site e, com seu consentimento, para medir audiência e melhorar a experiência. Você escolhe o que aceitar.</p>
+            <p>Usamos cookies para o funcionamento do site e, com seu consentimento, para medir audiência e melhorar a experiência. Você escolhe o que aceitar. Veja a <a href="/cookies">Política de Cookies</a>.</p>
           </div>
           <div className="cookie-banner-actions">
             <button type="button" className="button button-ghost button-small" onClick={() => setPrefsOpen(true)}>Personalizar</button>
@@ -136,6 +137,7 @@ export default function CookieConsent() {
             <button type="button" className="button button-ghost button-small" onClick={saveChosen}>Salvar preferências</button>
             <button type="button" className="button button-gold button-small" onClick={acceptAll}>Aceitar todos</button>
           </div>
+          <p className="cookie-prefs-note">Saiba mais na <a href="/cookies">Política de Cookies</a> e na <a href="/privacidade">Política de Privacidade</a>.</p>
         </div>
       </dialog>
     </React.Fragment>
