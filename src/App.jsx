@@ -3,34 +3,51 @@ import React from "react";
 import { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer } from "./sections.jsx";
 import { Check } from "./icons.jsx";
 
+// Endpoint do formulário de demonstração (Supabase Edge Function pública).
+// A chave publicável pode ficar no cliente; a tabela leads tem RLS travado.
+const LEAD_ENDPOINT = "https://wqnhzbwrsjwcvhnbzwtb.supabase.co/functions/v1/lead-demo";
+const LEAD_KEY = "sb_publishable_IuWhkC5_5lggizFYoaDahw_HVRtR4oc";
+
 function DemoDialog({ open, onClose }) {
   const ref = React.useRef(null);
   const [status, setStatus] = React.useState("");
+  const [sending, setSending] = React.useState(false);
   React.useEffect(() => {
     const d = ref.current;
     if (!d) return;
     if (open && !d.open) { d.showModal(); setStatus(""); }
     if (!open && d.open) d.close();
   }, [open]);
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const nome = (f.get("nome") || "").toString().trim();
-    const email = (f.get("email") || "").toString().trim();
-    const tel = (f.get("telefone") || "").toString().trim();
-    const interesse = (f.get("origem") || "").toString();
-    const msg = (f.get("mensagem") || "").toString().trim();
-    const subject = `Solicitação de demonstração — ${nome}`;
-    const body =
-      `Nome: ${nome}\n` +
-      `Email: ${email}\n` +
-      `Telefone: ${tel}\n` +
-      `Onde nos encontrou: ${interesse}\n\n` +
-      `Mensagem:\n${msg || "—"}\n`;
-    const href = `mailto:contato@terranexa.com.br?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = href;
-    setStatus("Abrindo seu e-mail para enviar a contato@terranexa.com.br…");
-    setTimeout(onClose, 2400);
+    const form = e.currentTarget;
+    const f = new FormData(form);
+    const payload = {
+      nome: (f.get("nome") || "").toString().trim(),
+      email: (f.get("email") || "").toString().trim(),
+      telefone: (f.get("telefone") || "").toString().trim(),
+      origem: (f.get("origem") || "").toString(),
+      mensagem: (f.get("mensagem") || "").toString().trim(),
+      empresa: (f.get("empresa") || "").toString(),
+      pagina: typeof window !== "undefined" ? window.location.href : "",
+    };
+    setSending(true);
+    setStatus("Enviando sua solicitação…");
+    try {
+      const res = await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: LEAD_KEY, Authorization: `Bearer ${LEAD_KEY}` },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("request_failed");
+      form.reset();
+      setStatus("Recebemos sua solicitação! Nossa equipe agronômica retorna em até 1 dia útil.");
+      setTimeout(onClose, 2800);
+    } catch (err) {
+      setStatus("Não foi possível enviar agora. Tente novamente ou escreva para contato@terranexa.com.br.");
+    } finally {
+      setSending(false);
+    }
   };
   const benefits = [
     "Demonstração guiada pela realidade da sua fazenda",
@@ -66,6 +83,7 @@ function DemoDialog({ open, onClose }) {
           <h3 id="demo-title">Prepare uma conversa direcionada</h3>
           <p className="demo-sub">Preencha os dados e nossa equipe agronômica retorna em até 1 dia útil.</p>
           <form className="demo-form" onSubmit={submit}>
+            <input type="text" name="empresa" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
             <label>Nome<input name="nome" type="text" autoComplete="name" placeholder="Seu nome completo" required /></label>
             <label>Email<input name="email" type="email" autoComplete="email" placeholder="voce@fazenda.com.br" required /></label>
             <label>Telefone / WhatsApp<input name="telefone" type="tel" autoComplete="tel" placeholder="(00) 00000-0000" required /></label>
@@ -83,7 +101,7 @@ function DemoDialog({ open, onClose }) {
             <label className="full">Conte sobre sua operação <span style={{ color: "#6f8073", fontWeight: 500 }}>(opcional)</span>
               <textarea name="mensagem" placeholder="Área cultivada, culturas, principais desafios…"></textarea>
             </label>
-            <button className="button button-gold" type="submit">Enviar solicitação</button>
+            <button className="button button-gold" type="submit" disabled={sending}>{sending ? "Enviando…" : "Enviar solicitação"}</button>
             <p className="demo-privacy">Ao enviar, você concorda em ser contatado pela equipe TerraNexa. Seus dados não são compartilhados.</p>
             <p className="form-status" role="status">{status}</p>
           </form>
