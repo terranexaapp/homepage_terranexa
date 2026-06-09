@@ -59,7 +59,7 @@ function DemoDialog({ open, onClose }) {
     <dialog className="demo-dialog" ref={ref} onClose={onClose} onCancel={onClose} aria-labelledby="demo-title">
       <div className="demo-shell">
         <aside className="demo-aside">
-          <img className="demo-aside-bg" src="assets/demo-aside.png" alt="" aria-hidden="true" />
+          <img className="demo-aside-bg" src="assets/demo-aside.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div className="demo-aside-shade"></div>
           <div className="demo-aside-head">
             <span className="brand-wordmark"><span>Terra</span><span>Nexa</span></span>

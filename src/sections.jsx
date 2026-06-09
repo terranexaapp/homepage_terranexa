@@ -59,7 +59,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
 function Hero({ onDemo }) {
   return (
     <section className="hero" id="inicio">
-      <img className="hero-background" src="assets/hero-algodao.png" alt="Produtora no campo de algodão usando a plataforma TerraNexa" />
+      <img className="hero-background" src="assets/hero-algodao.webp" alt="Produtora no campo de algodão usando a plataforma TerraNexa" fetchpriority="high" decoding="async" />
       <div className="hero-shade"></div>
       <div className="container hero-layout hero-layout-solo">
         <div className="hero-copy">
@@ -97,7 +97,7 @@ function ProofStrip() {
 function Platform() {
   const benefits = [
     [<Integration />, "Operação integrada", "Ordens, insumos, custos e equipes no mesmo fluxo."],
-    [<Trend />, "Decisões no campo OFFLINE", "Indicadores confiáveis para priorizar o que importa."],
+    [<Trend />, "Decisões no campo, mesmo offline", "Registre e consulte informações sem conexão; sincroniza ao reconectar."],
     [<Leaf />, "Campo mais produtivo", "Tecnologia simples para executar melhor e reduzir perdas."],
   ];
   return (
@@ -115,7 +115,7 @@ function Platform() {
           </ul>
         </div>
         <div className="field-visual" id="campo">
-          <img src="assets/produto-colheita.png" alt="Produtor ajoelhado no campo de soja conferindo grãos pelo celular durante a colheita" />
+          <img src="assets/produto-colheita.webp" alt="Produtor ajoelhado no campo de soja conferindo grãos pelo celular durante a colheita" loading="lazy" decoding="async" />
           <div className="field-visual-shade"></div>
           <div className="field-data-card">
             <div><span>Monitoramento de campo</span><strong>6 ocorrências</strong><small>2 críticas · equipe notificada</small></div>
@@ -162,12 +162,12 @@ function Modules() {
 function Product() {
   const trackRef = React.useRef(null);
   const cards = [
-    ["produto-mapas.png", "Visão territorial", "Mapas inteligentes por talhão"],
-    ["produto-os.png", "Controle operacional", "Ordens de serviço com custo real"],
-    ["produto-monitoramento.png", "Campo conectado", "Monitoramento com evidências"],
-    ["produto-solo.png", "Inteligência agronômica", "Solo e fertilidade com precisão"],
-    ["produto-custos.png", "Gestão financeira", "Custos organizados por operação"],
-    ["produto-equipe.png", "Gestão de pessoas", "Equipe e execução no mesmo fluxo"],
+    ["produto-mapas.webp", "Visão territorial", "Mapas inteligentes por talhão"],
+    ["produto-os.webp", "Controle operacional", "Ordens de serviço com custo real"],
+    ["produto-monitoramento.webp", "Campo conectado", "Monitoramento com evidências"],
+    ["produto-solo.webp", "Inteligência agronômica", "Solo e fertilidade com precisão"],
+    ["produto-custos.webp", "Gestão financeira", "Custos organizados por operação"],
+    ["produto-equipe.webp", "Gestão de pessoas", "Equipe e execução no mesmo fluxo"],
   ];
   const scroll = (dir) => {
     const el = trackRef.current;
@@ -189,7 +189,7 @@ function Product() {
         <div className="product-track" ref={trackRef}>
           {cards.map(([img, tag, title]) => (
             <article className="product-card" key={img}>
-              <img src={"assets/" + img} alt={title} />
+              <img src={"assets/" + img} alt={title} loading="lazy" decoding="async" />
               <div className="product-card-caption"><span>{tag}</span><h3>{title}</h3></div>
             </article>
           ))}
@@ -229,7 +229,7 @@ function DemoCTA({ onDemo }) {
     <section className="demo section" id="demonstracao">
       <div className="container">
         <div className="demo-panel">
-          <img src="assets/cta-casal-campo.png" alt="" aria-hidden="true" />
+          <img src="assets/cta-casal-campo.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div className="demo-shade"></div>
           <div className="demo-copy">
             <p className="section-label section-label-gold">Pronto para transformar sua gestão?</p>
