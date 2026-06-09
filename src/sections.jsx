@@ -59,7 +59,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
 function Hero({ onDemo }) {
   return (
     <section className="hero" id="inicio">
-      <img className="hero-background" src="assets/hero-algodao.webp" alt="Produtora no campo de algodão usando a plataforma TerraNexa" fetchpriority="high" decoding="async" />
+      <img className="hero-background" src="assets/hero-algodao.webp" srcSet="assets/hero-algodao-768.webp 768w, assets/hero-algodao-1200.webp 1200w, assets/hero-algodao.webp 1672w" sizes="100vw" alt="Produtora no campo de algodão usando a plataforma TerraNexa" fetchpriority="high" decoding="async" />
       <div className="hero-shade"></div>
       <div className="container hero-layout hero-layout-solo">
         <div className="hero-copy">
@@ -115,7 +115,7 @@ function Platform() {
           </ul>
         </div>
         <div className="field-visual" id="campo">
-          <img src="assets/produto-colheita.webp" alt="Produtor ajoelhado no campo de soja conferindo grãos pelo celular durante a colheita" loading="lazy" decoding="async" />
+          <img src="assets/produto-colheita.webp" srcSet="assets/produto-colheita-768.webp 768w, assets/produto-colheita-1100.webp 1100w, assets/produto-colheita.webp 1400w" sizes="(min-width: 901px) 600px, 100vw" alt="Produtor ajoelhado no campo de soja conferindo grãos pelo celular durante a colheita" loading="lazy" decoding="async" />
           <div className="field-visual-shade"></div>
           <div className="field-data-card">
             <div><span>Monitoramento de campo</span><strong>6 ocorrências</strong><small>2 críticas · equipe notificada</small></div>
@@ -187,12 +187,15 @@ function Product() {
           </div>
         </div>
         <div className="product-track" ref={trackRef}>
-          {cards.map(([img, tag, title]) => (
+          {cards.map(([img, tag, title]) => {
+            const base = "assets/" + img.replace(".webp", "");
+            return (
             <article className="product-card" key={img}>
-              <img src={"assets/" + img} alt={title} loading="lazy" decoding="async" />
+              <img src={"assets/" + img} srcSet={`${base}-480.webp 480w, ${base}-720.webp 720w, assets/${img} 900w`} sizes="(min-width: 1101px) 400px, (min-width: 621px) 520px, 88vw" alt={title} loading="lazy" decoding="async" />
               <div className="product-card-caption"><span>{tag}</span><h3>{title}</h3></div>
             </article>
-          ))}
+            );
+          })}
         </div>
         <p className="product-note">Interface pensada para desktop e mobile, com continuidade entre escritório e campo.</p>
       </div>
@@ -229,7 +232,7 @@ function DemoCTA({ onDemo }) {
     <section className="demo section" id="demonstracao">
       <div className="container">
         <div className="demo-panel">
-          <img src="assets/cta-casal-campo.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+          <img src="assets/cta-casal-campo.webp" srcSet="assets/cta-casal-campo-768.webp 768w, assets/cta-casal-campo-1200.webp 1200w, assets/cta-casal-campo.webp 1600w" sizes="(min-width: 1280px) 1232px, 95vw" alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div className="demo-shade"></div>
           <div className="demo-copy">
             <p className="section-label section-label-gold">Pronto para transformar sua gestão?</p>
