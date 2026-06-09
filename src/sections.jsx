@@ -270,6 +270,7 @@ function Footer({ onDemo }) {
         <div className="footer-bottom-links">
           <a href="/privacidade">Privacidade</a>
           <a href="/cookies">Cookies</a>
+          <a href="/termos">Termos</a>
           <button type="button" className="cookie-link" onClick={() => window.dispatchEvent(new Event("tnx:cookie-prefs"))}>Preferências de cookies</button>
           <a href="#inicio">Voltar ao topo ↑</a>
         </div>
