@@ -2,6 +2,7 @@
 import React from "react";
 import { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer } from "./sections.jsx";
 import { Check } from "./icons.jsx";
+import CookieConsent from "./CookieConsent.jsx";
 
 // Endpoint do formulário de demonstração (Supabase Edge Function pública).
 // A chave publicável pode ficar no cliente; a tabela leads tem RLS travado.
@@ -151,6 +152,7 @@ function App() {
       </main>
       <Footer onDemo={openDemo} />
       <DemoDialog open={demoOpen} onClose={() => setDemoOpen(false)} />
+      <CookieConsent />
     </React.Fragment>
   );
 }

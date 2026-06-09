@@ -267,7 +267,10 @@ function Footer({ onDemo }) {
       </div>
       <div className="container footer-bottom">
         <span>© 2026 TerraNexa. Todos os direitos reservados.</span>
-        <a href="#inicio">Voltar ao topo ↑</a>
+        <div className="footer-bottom-links">
+          <button type="button" className="cookie-link" onClick={() => window.dispatchEvent(new Event("tnx:cookie-prefs"))}>Preferências de cookies</button>
+          <a href="#inicio">Voltar ao topo ↑</a>
+        </div>
       </div>
     </footer>
   );
