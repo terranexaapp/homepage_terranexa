@@ -43,7 +43,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
             { label: "Resultados operacionais", href: "#resultados" },
             { label: "Falar com a TerraNexa", action: onDemo },
           ]} />
-          <a href="#produto">Plataforma</a>
+          <a href="#plataforma">Plataforma</a>
           <a href="#contato">Contato</a>
         </nav>
         <div className="header-actions">
