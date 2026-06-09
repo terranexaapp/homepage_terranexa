@@ -48,3 +48,13 @@ footer.site-foot .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-cont
 footer.site-foot .links { display: flex; flex-wrap: wrap; gap: 18px; }
 footer.site-foot a { color: #9fb0a2; }
 footer.site-foot a:hover { color: var(--green); }
+
+/* 404 */
+.notfound { max-width: 640px; margin: 0 auto; padding: 96px 24px 90px; text-align: center; }
+.notfound .code { font-family: var(--serif); font-size: clamp(76px, 15vw, 132px); line-height: 1; color: var(--green); letter-spacing: -0.04em; }
+.notfound h1 { margin: 10px 0 14px; }
+.notfound p { color: #c9d6cb; font-size: 17px; }
+.notfound .actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 28px; }
+.notfound .btn-home { display: inline-flex; align-items: center; min-height: 48px; padding: 0 26px; border-radius: 12px; background: var(--green); color: #07130b; font-weight: 800; font-size: 15px; }
+.notfound .btn-home:hover { text-decoration: none; filter: brightness(1.06); }
+.notfound .more { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 24px; font-size: 14px; }

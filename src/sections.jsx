@@ -186,7 +186,7 @@ function Product() {
             <button type="button" aria-label="Próxima" onClick={() => scroll(1)}><ChevronRight /></button>
           </div>
         </div>
-        <div className="product-track" ref={trackRef}>
+        <div className="product-track" ref={trackRef} tabIndex={0} aria-label="Galeria do produto — use as setas do teclado ou arraste para navegar">
           {cards.map(([img, tag, title]) => {
             const base = "assets/" + img.replace(".webp", "");
             return (
@@ -254,6 +254,7 @@ function Footer({ onDemo }) {
         <div className="footer-brand">
           <img src={LOGO} alt="TerraNexa" />
           <p>Informação confiável. Gestão inteligente. Campo mais produtivo.</p>
+          <p className="footer-legal-id">N C Agronegócios LTDA · CNPJ 51.694.329/0001-30</p>
         </div>
         <div>
           <strong>Plataforma</strong>
