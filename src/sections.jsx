@@ -7,13 +7,20 @@ const LOGO = "assets/terranexa-logo-footer.svg";
 
 /* ---------------- Header ---------------- */
 function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDemo }) {
+  const closeMenus = () => { setOpenGroup(null); setMenuOpen(false); };
   const Group = ({ id, label, links }) => (
     <div className={"nav-group" + (openGroup === id ? " is-open" : "")}>
-      <button type="button" onClick={() => setOpenGroup(openGroup === id ? null : id)}>
+      <button type="button" aria-expanded={openGroup === id} onClick={() => setOpenGroup(openGroup === id ? null : id)}>
         {label} <Chevron />
       </button>
       <div className="nav-dropdown">
-        {links.map((l) => (<a key={l} href="#" onClick={(e) => e.preventDefault()}>{l}</a>))}
+        {links.map((l) =>
+          l.action ? (
+            <a key={l.label} href={l.href || "#demonstracao"} onClick={(e) => { e.preventDefault(); closeMenus(); l.action(); }}>{l.label}</a>
+          ) : (
+            <a key={l.label} href={l.href} onClick={closeMenus}>{l.label}</a>
+          )
+        )}
       </div>
     </div>
   );
@@ -26,8 +33,16 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
         </button>
         <nav className={"main-navigation" + (menuOpen ? " is-open" : "")} aria-label="Navegação principal">
           <a href="#inicio">Início</a>
-          <Group id="sol" label="Soluções" links={["Visão integrada", "Módulos da plataforma", "Produto em ação"]} />
-          <Group id="rec" label="Recursos" links={["Tecnologia no campo", "Resultados operacionais", "Falar com a TerraNexa"]} />
+          <Group id="sol" label="Soluções" links={[
+            { label: "Visão integrada", href: "#plataforma" },
+            { label: "Módulos da plataforma", href: "#modulos" },
+            { label: "Produto em ação", href: "#produto" },
+          ]} />
+          <Group id="rec" label="Recursos" links={[
+            { label: "Tecnologia no campo", href: "#campo" },
+            { label: "Resultados operacionais", href: "#resultados" },
+            { label: "Falar com a TerraNexa", action: onDemo },
+          ]} />
           <a href="#produto">Plataforma</a>
           <a href="#contato">Contato</a>
         </nav>
