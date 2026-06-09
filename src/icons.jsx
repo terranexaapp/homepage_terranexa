@@ -1,5 +1,4 @@
 /* TerraNexa homepage icons — stroked line set matching the production SVGs. */
-(function () {
 const S = (p) => ({ viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round", ...p });
 
 const Chevron = (p) => (<svg {...S(p)}><path d="m5 7.5 5 5 5-5" /></svg>);
@@ -16,5 +15,4 @@ const Order = (p) => (<svg {...S(p)}><rect x="3" y="5" width="18" height="16" rx
 const Soil = (p) => (<svg {...S(p)}><path d="M5 18c9 1 14-4 14-14C9 3 4 9 5 18Zm2-1L17 7" /></svg>);
 const Layers = (p) => (<svg {...S(p)}><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4" /></svg>);
 
-Object.assign(window, { TNXIcons: { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers } });
-})();
+export { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers };

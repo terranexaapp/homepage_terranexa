@@ -1,7 +1,7 @@
 /* TerraNexa homepage — interactive app shell. */
-(function () {
-const { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer } = window.TNXSections;
-const { Check } = window.TNXIcons;
+import React from "react";
+import { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer } from "./sections.jsx";
+import { Check } from "./icons.jsx";
 
 function DemoDialog({ open, onClose }) {
   const ref = React.useRef(null);
@@ -137,5 +137,4 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-})();
+export default App;

@@ -1,7 +1,7 @@
 /* TerraNexa homepage — section components. Faithful recreation of the
    production marketing page, factored into composable sections. */
-(function () {
-const { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers } = window.TNXIcons;
+import React from "react";
+import { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers } from "./icons.jsx";
 
 const LOGO = "assets/terranexa-logo-footer.svg";
 
@@ -258,5 +258,4 @@ function Footer({ onDemo }) {
   );
 }
 
-Object.assign(window, { TNXSections: { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer } });
-})();
+export { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer };
