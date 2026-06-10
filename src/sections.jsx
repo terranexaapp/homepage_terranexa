@@ -45,6 +45,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
           ]} />
           <a href="#plataforma">Plataforma</a>
           <a href="#contato">Contato</a>
+          <a className="nav-platform-access" href="https://app.terranexa.com.br" target="_blank" rel="noopener noreferrer" onClick={closeMenus}>Acessar plataforma</a>
         </nav>
         <div className="header-actions">
           <a className="button button-ghost button-small" href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Entrar</a>
