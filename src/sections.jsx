@@ -254,7 +254,6 @@ function Footer({ onDemo }) {
         <div className="footer-brand">
           <img src={LOGO} alt="TerraNexa" />
           <p>Informação confiável. Gestão inteligente. Campo mais produtivo.</p>
-          <p className="footer-legal-id">N C Agronegócios LTDA · CNPJ 51.694.329/0001-30</p>
         </div>
         <div>
           <strong>Plataforma</strong>
