@@ -1,0 +1,469 @@
+/* TerraNexa — fluxo de assinatura em 2 passos.
+   Passo 1 (/assinar): escolha de plano e faixa de hectares.
+   Passo 2 (/assinar/cadastro): cadastro público + checkout Asaas.
+   Visual fiel ao modal "Solicite uma demonstração" (tokens do site). */
+import React from "react";
+import { Check } from "./icons.jsx";
+
+/* Endpoint público de billing (já em produção no backend terranexa). */
+const BILLING_BASE = "https://app.terranexa.com.br/api/billing";
+
+/* ---------------- Helpers ---------------- */
+const onlyDigits = (v) => (v || "").toString().replace(/\D+/g, "");
+
+const brl = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+  maximumFractionDigits: 0,
+});
+const formatBRL = (n) => brl.format(Math.round(Number(n) || 0));
+
+function formatTelefone(v) {
+  const d = onlyDigits(v).slice(0, 11);
+  if (d.length <= 10) {
+    return d
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d{1,4})$/, "$1-$2");
+  }
+  return d
+    .replace(/^(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+}
+
+function formatDocumento(v) {
+  const d = onlyDigits(v).slice(0, 14);
+  if (d.length <= 11) {
+    return d
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+  return d
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2}\.\d{3})(\d)/, "$1.$2")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+}
+
+function validaCPF(value) {
+  const cpf = onlyDigits(value);
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(cpf[i], 10) * (10 - i);
+  let d1 = (soma * 10) % 11;
+  if (d1 === 10) d1 = 0;
+  if (d1 !== parseInt(cpf[9], 10)) return false;
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(cpf[i], 10) * (11 - i);
+  let d2 = (soma * 10) % 11;
+  if (d2 === 10) d2 = 0;
+  return d2 === parseInt(cpf[10], 10);
+}
+
+function validaCNPJ(value) {
+  const cnpj = onlyDigits(value);
+  if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
+  const calc = (len) => {
+    let pos = len - 7;
+    let soma = 0;
+    for (let i = len; i >= 1; i--) {
+      soma += parseInt(cnpj[len - i], 10) * pos--;
+      if (pos < 2) pos = 9;
+    }
+    const r = soma % 11;
+    return r < 2 ? 0 : 11 - r;
+  };
+  if (calc(12) !== parseInt(cnpj[12], 10)) return false;
+  return calc(13) === parseInt(cnpj[13], 10);
+}
+
+function tipoDocumento(value) {
+  return onlyDigits(value).length > 11 ? "CNPJ" : "CPF";
+}
+function validaDocumento(value) {
+  return tipoDocumento(value) === "CNPJ" ? validaCNPJ(value) : validaCPF(value);
+}
+
+/* ---------------- Planos: fetch + normalização ---------------- */
+// Conjunto de fallback usado se o endpoint estiver indisponível ou bloqueado
+// por CORS. Mantém a página funcional mesmo offline.
+const PLANOS_FALLBACK = [
+  {
+    nome: "Essencial",
+    cor: "verde",
+    descricao: "O essencial para organizar talhões, operações e custos da fazenda.",
+    faixas: [
+      { rotulo: "Até 500 ha", haMin: 0, precoMensal: 199, precoAnual: 1990 },
+      { rotulo: "501 a 1.500 ha", haMin: 501, precoMensal: 349, precoAnual: 3490 },
+      { rotulo: "1.501 a 3.000 ha", haMin: 1501, precoMensal: 549, precoAnual: 5490 },
+    ],
+  },
+  {
+    nome: "Profissional",
+    cor: "azul",
+    descricao: "Gestão completa com monitoramento, solo e inteligência agronômica.",
+    faixas: [
+      { rotulo: "Até 500 ha", haMin: 0, precoMensal: 399, precoAnual: 3990 },
+      { rotulo: "501 a 1.500 ha", haMin: 501, precoMensal: 649, precoAnual: 6490 },
+      { rotulo: "1.501 a 3.000 ha", haMin: 1501, precoMensal: 949, precoAnual: 9490 },
+    ],
+  },
+];
+
+function num(...vals) {
+  for (const v of vals) {
+    if (v === 0) return 0;
+    if (v != null && v !== "" && !Number.isNaN(Number(v))) return Number(v);
+  }
+  return undefined;
+}
+
+function inferirCor(nome = "") {
+  const n = nome.toLowerCase();
+  if (/profiss|pro\b|avan|premium/.test(n)) return "azul";
+  return "verde";
+}
+
+function normalizarFaixa(f) {
+  const haMin = num(f.haMin, f.ha_min, f.min, f.de, f.from, f.ha) ?? 0;
+  const precoMensal = num(f.precoMensal, f.preco_mensal, f.mensal, f.valorMensal, f.valor_mensal, f.priceMonthly, f.preco, f.valor);
+  const precoAnual = num(f.precoAnual, f.preco_anual, f.anual, f.valorAnual, f.valor_anual, f.priceYearly);
+  if (precoMensal === undefined && precoAnual === undefined) return null;
+  return {
+    rotulo: f.rotulo || f.label || f.nome || f.faixa || (haMin ? `A partir de ${haMin} ha` : "Faixa"),
+    haMin,
+    precoMensal: precoMensal ?? Math.round((precoAnual || 0) / 10),
+    precoAnual: precoAnual ?? Math.round((precoMensal || 0) * 10),
+  };
+}
+
+function normalizarPlanos(raw) {
+  let list = raw;
+  if (!Array.isArray(list)) {
+    list = raw?.planos || raw?.data?.planos || raw?.data || raw?.items || [];
+  }
+  if (!Array.isArray(list) || !list.length) return null;
+  const planos = list
+    .map((p) => {
+      const nome = p.nome || p.name || p.titulo || p.plano || "Plano";
+      const faixasRaw = p.faixas || p.tiers || p.ranges || p.precos || p.planos || [];
+      const faixas = (Array.isArray(faixasRaw) ? faixasRaw : []).map(normalizarFaixa).filter(Boolean);
+      const enterprise = !!p.enterprise || /enterprise|corporativ|sob consulta/i.test(nome);
+      return {
+        nome,
+        cor: p.cor || p.color || inferirCor(nome),
+        descricao: p.descricao || p.description || p.subtitulo || "",
+        enterprise,
+        faixas,
+      };
+    })
+    .filter((p) => p.enterprise || p.faixas.length);
+  return planos.length ? planos : null;
+}
+
+async function carregarPlanos() {
+  try {
+    const res = await fetch(`${BILLING_BASE}?acao=planos`, {
+      headers: { Accept: "application/json" },
+    });
+    if (!res.ok) throw new Error("status " + res.status);
+    const data = await res.json();
+    const planos = normalizarPlanos(data);
+    if (planos) return planos;
+  } catch (_e) {
+    /* silencioso — cai no fallback */
+  }
+  return PLANOS_FALLBACK;
+}
+
+/* Economia anual aproximada (para a badge do toggle), derivada do 1º plano. */
+function economiaAnualPct(planos) {
+  for (const p of planos) {
+    const f = p.faixas?.[0];
+    if (f && f.precoMensal && f.precoAnual) {
+      const pct = Math.round((1 - f.precoAnual / 12 / f.precoMensal) * 100);
+      if (pct > 0) return pct;
+    }
+  }
+  return 0;
+}
+
+function precoExibido(faixa, ciclo) {
+  if (ciclo === "anual") {
+    return { valor: Math.round(faixa.precoAnual / 12), sufixo: "/mês", nota: `cobrado anualmente · ${formatBRL(faixa.precoAnual)}/ano` };
+  }
+  return { valor: faixa.precoMensal, sufixo: "/mês", nota: "cobrança mensal" };
+}
+
+/* ---------------- Passo 1: escolha do plano ---------------- */
+function AssinarPlanos({ navigate }) {
+  const [planos, setPlanos] = React.useState(null);
+  const [ciclo, setCiclo] = React.useState(() => {
+    const q = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    return q.get("ciclo") === "anual" ? "anual" : "mensal";
+  });
+  const [selecao, setSelecao] = React.useState(null); // { planoNome, haMin, rotulo }
+
+  React.useEffect(() => {
+    let ativo = true;
+    carregarPlanos().then((p) => {
+      if (ativo) setPlanos(p);
+    });
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  const pagaveis = (planos || []).filter((p) => !p.enterprise && p.faixas.length);
+  const enterprise = (planos || []).find((p) => p.enterprise);
+  const economia = planos ? economiaAnualPct(planos) : 0;
+
+  const continuar = () => {
+    if (!selecao) return;
+    const qs = new URLSearchParams({
+      plano: selecao.planoNome,
+      ha: String(selecao.haMin),
+      ciclo,
+    });
+    navigate(`/assinar/cadastro?${qs.toString()}`);
+  };
+
+  return (
+    <main className="assinar" id="conteudo">
+      <div className="container">
+        <div className="assinar-head">
+          <span className="plan-pill"><Check /> 7 dias grátis — sem cobrança imediata</span>
+          <h1>Escolha o plano ideal para a sua operação.</h1>
+          <p>Comece com 7 dias grátis. Selecione o plano e a faixa de área da sua fazenda — você só confirma o cartão no fim.</p>
+
+          <div className="ciclo-toggle" role="group" aria-label="Ciclo de cobrança">
+            <button type="button" className={ciclo === "mensal" ? "is-active" : ""} aria-pressed={ciclo === "mensal"} onClick={() => setCiclo("mensal")}>Mensal</button>
+            <button type="button" className={ciclo === "anual" ? "is-active" : ""} aria-pressed={ciclo === "anual"} onClick={() => setCiclo("anual")}>
+              Anual{economia > 0 && <span className="ciclo-badge">-{economia}%</span>}
+            </button>
+          </div>
+        </div>
+
+        {!planos ? (
+          <p className="assinar-note" style={{ marginTop: 48 }}>Carregando planos…</p>
+        ) : (
+          <>
+            <div className="plan-grid">
+              {pagaveis.map((plano) => {
+                const cardSelecionado = selecao?.planoNome === plano.nome;
+                return (
+                  <article key={plano.nome} className={`plan-card plan-card--${plano.cor}${cardSelecionado ? " is-selected" : ""}`}>
+                    <span className="plan-accent">{plano.nome}</span>
+                    <h3>{plano.nome}</h3>
+                    {plano.descricao && <p className="plan-desc">{plano.descricao}</p>}
+                    <ul className="faixa-list">
+                      {plano.faixas.map((faixa) => {
+                        const id = `${plano.nome}-${faixa.haMin}`;
+                        const checked = cardSelecionado && selecao?.haMin === faixa.haMin;
+                        const preco = precoExibido(faixa, ciclo);
+                        return (
+                          <li key={id}>
+                            <label className={`faixa-option${checked ? " is-checked" : ""}`}>
+                              <input
+                                type="radio"
+                                name="faixa"
+                                value={id}
+                                checked={checked}
+                                onChange={() => setSelecao({ planoNome: plano.nome, haMin: faixa.haMin, rotulo: faixa.rotulo })}
+                              />
+                              <span className="faixa-mark" aria-hidden="true" />
+                              <span className="faixa-text">
+                                <span className="faixa-rotulo">{faixa.rotulo}</span>
+                                <span className="faixa-preco">{formatBRL(preco.valor)}<small>{preco.sufixo}</small></span>
+                              </span>
+                            </label>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="plan-enterprise">
+              <div>
+                <h3>{enterprise?.nome || "Enterprise"}</h3>
+                <p>{enterprise?.descricao || "Para grandes áreas e grupos: faixas personalizadas, integrações e suporte dedicado."}</p>
+              </div>
+              <a href="mailto:contato@terranexa.com.br?subject=Plano%20Enterprise%20TerraNexa">Falar <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div className="assinar-foot">
+              <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
+                Continuar <span aria-hidden="true">→</span>
+              </button>
+              <p className="assinar-note">Sem cobrança nos 7 dias de teste. Cancele quando quiser.</p>
+            </div>
+          </>
+        )}
+      </div>
+    </main>
+  );
+}
+
+/* ---------------- Passo 2: cadastro ---------------- */
+function lerSelecao() {
+  const q = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+  return {
+    planoNome: q.get("plano") || "",
+    haMin: q.get("ha") || "",
+    ciclo: q.get("ciclo") === "anual" ? "anual" : "mensal",
+  };
+}
+
+function AssinarCadastro({ navigate }) {
+  const selecao = React.useMemo(lerSelecao, []);
+  const [planos, setPlanos] = React.useState(null);
+  const [valores, setValores] = React.useState({ nome: "", email: "", telefone: "", senha: "", confirma: "", documento: "" });
+  const [erros, setErros] = React.useState({});
+  const [enviando, setEnviando] = React.useState(false);
+  const [status, setStatus] = React.useState("");
+  const [sucesso, setSucesso] = React.useState(false);
+
+  // Redireciona ao passo 1 se chegou sem seleção.
+  React.useEffect(() => {
+    if (!selecao.planoNome) navigate("/assinar");
+  }, []); // eslint-disable-line
+
+  React.useEffect(() => {
+    carregarPlanos().then(setPlanos);
+  }, []);
+
+  const resumoPreco = React.useMemo(() => {
+    if (!planos) return null;
+    const plano = planos.find((p) => p.nome === selecao.planoNome);
+    const faixa = plano?.faixas?.find((f) => String(f.haMin) === String(selecao.haMin)) || plano?.faixas?.[0];
+    if (!plano || !faixa) return null;
+    return { faixa, preco: precoExibido(faixa, selecao.ciclo) };
+  }, [planos, selecao]);
+
+  const set = (campo) => (e) => {
+    let v = e.target.value;
+    if (campo === "telefone") v = formatTelefone(v);
+    if (campo === "documento") v = formatDocumento(v);
+    setValores((s) => ({ ...s, [campo]: v }));
+    setErros((s) => ({ ...s, [campo]: undefined }));
+  };
+
+  function validar() {
+    const e = {};
+    if (!valores.nome.trim()) e.nome = "Informe seu nome completo.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valores.email.trim())) e.email = "Informe um e-mail válido.";
+    if (onlyDigits(valores.telefone).length < 10) e.telefone = "Informe um telefone válido com DDD.";
+    if (valores.senha.length < 8) e.senha = "A senha deve ter ao menos 8 caracteres.";
+    if (valores.confirma !== valores.senha) e.confirma = "As senhas não conferem.";
+    if (!validaDocumento(valores.documento)) e.documento = "CPF/CNPJ inválido.";
+    setErros(e);
+    return Object.keys(e).length === 0;
+  }
+
+  async function submit(ev) {
+    ev.preventDefault();
+    if (!validar()) return;
+    setEnviando(true);
+    setStatus("Criando sua conta…");
+    const payload = {
+      nome: valores.nome.trim(),
+      email: valores.email.trim(),
+      telefone: valores.telefone.trim(),
+      senha: valores.senha,
+      documento: onlyDigits(valores.documento),
+      documentoTipo: tipoDocumento(valores.documento),
+      planoNome: selecao.planoNome,
+      haMin: Number(selecao.haMin) || 0,
+      ciclo: selecao.ciclo,
+    };
+    try {
+      const res = await fetch(`${BILLING_BASE}?acao=cadastro-publico`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      let data = {};
+      try { data = await res.json(); } catch (_e) { /* corpo vazio */ }
+      if (!res.ok) {
+        throw new Error(data.error || data.message || "Não foi possível concluir o cadastro.");
+      }
+      const link = data.linkCheckout || data.checkoutUrl || data.url || data.data?.linkCheckout;
+      if (link) {
+        setStatus("Conta criada! Redirecionando para o cadastro do cartão…");
+        window.location.href = link;
+        return;
+      }
+      setSucesso(true);
+      setStatus("Conta criada com sucesso! Em instantes você receberá as instruções por e-mail.");
+    } catch (err) {
+      setStatus(err.message || "Não foi possível concluir o cadastro. Tente novamente.");
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  const cicloLabel = selecao.ciclo === "anual" ? "Anual" : "Mensal";
+
+  return (
+    <main className="cadastro" id="conteudo">
+      <div className="cadastro-shell">
+        <div className="cadastro-summary">
+          <div>
+            <span className="resumo-label">Plano selecionado</span>
+            <strong>
+              {selecao.planoNome || "—"} · {cicloLabel}
+              {resumoPreco && <> — {formatBRL(resumoPreco.preco.valor)}{resumoPreco.preco.sufixo}</>}
+            </strong>
+            <span className="resumo-sub">{resumoPreco ? resumoPreco.faixa.rotulo : `A partir de ${selecao.haMin || 0} ha`}</span>
+          </div>
+          <a className="alterar" href="/assinar" onClick={(e) => { e.preventDefault(); navigate(`/assinar?plano=${encodeURIComponent(selecao.planoNome)}&ciclo=${selecao.ciclo}`); }}>Alterar</a>
+        </div>
+
+        <p className="cadastro-eyebrow">Crie sua conta</p>
+        <h1>Comece seus 7 dias grátis</h1>
+        <p className="cadastro-sub">Preencha seus dados para criar a conta. Você confirma o cartão no próximo passo — sem cobrança durante o teste.</p>
+
+        {sucesso ? (
+          <p className="form-status" role="status" style={{ marginTop: 28, fontSize: 15 }}>{status}</p>
+        ) : (
+          <form className="demo-form" onSubmit={submit} noValidate>
+            <label className="full">Nome completo
+              <input name="nome" type="text" autoComplete="name" placeholder="Seu nome completo" value={valores.nome} onChange={set("nome")} className={erros.nome ? "input-invalid" : ""} />
+            </label>
+            {erros.nome && <p className="field-error">{erros.nome}</p>}
+
+            <label>E-mail
+              <input name="email" type="email" autoComplete="email" placeholder="voce@fazenda.com.br" value={valores.email} onChange={set("email")} className={erros.email ? "input-invalid" : ""} />
+            </label>
+            <label>Telefone / WhatsApp
+              <input name="telefone" type="tel" inputMode="tel" autoComplete="tel" placeholder="(00) 00000-0000" value={valores.telefone} onChange={set("telefone")} className={erros.telefone ? "input-invalid" : ""} />
+            </label>
+            {(erros.email || erros.telefone) && <p className="field-error">{erros.email || erros.telefone}</p>}
+
+            <label>Senha
+              <input name="senha" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" value={valores.senha} onChange={set("senha")} className={erros.senha ? "input-invalid" : ""} />
+            </label>
+            <label>Confirme sua senha
+              <input name="confirma" type="password" autoComplete="new-password" placeholder="Repita a senha" value={valores.confirma} onChange={set("confirma")} className={erros.confirma ? "input-invalid" : ""} />
+            </label>
+            {(erros.senha || erros.confirma) && <p className="field-error">{erros.senha || erros.confirma}</p>}
+
+            <label className="full">CPF / CNPJ
+              <input name="documento" type="text" inputMode="numeric" placeholder="000.000.000-00" value={valores.documento} onChange={set("documento")} className={erros.documento ? "input-invalid" : ""} />
+            </label>
+            {erros.documento && <p className="field-error">{erros.documento}</p>}
+
+            <button className="button button-gold" type="submit" disabled={enviando}>{enviando ? "Criando conta…" : "Criar conta e continuar →"}</button>
+            <p className="demo-privacy">Ao criar a conta você concorda com os <a href="/termos">Termos</a> e a <a href="/privacidade">Política de Privacidade</a> da TerraNexa.</p>
+            <p className="form-status" role="status">{status}</p>
+          </form>
+        )}
+      </div>
+    </main>
+  );
+}
+
+export { AssinarPlanos, AssinarCadastro };

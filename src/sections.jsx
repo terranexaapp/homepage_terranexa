@@ -6,7 +6,7 @@ import { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integrati
 const LOGO = "assets/terranexa-logo-footer.svg";
 
 /* ---------------- Header ---------------- */
-function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDemo }) {
+function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDemo, base = "" }) {
   const closeMenus = () => { setOpenGroup(null); setMenuOpen(false); };
   const Group = ({ id, label, links }) => (
     <div className={"nav-group" + (openGroup === id ? " is-open" : "")}>
@@ -16,7 +16,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
       <div className="nav-dropdown">
         {links.map((l) =>
           l.action ? (
-            <a key={l.label} href={l.href || "#demonstracao"} onClick={(e) => { e.preventDefault(); closeMenus(); l.action(); }}>{l.label}</a>
+            <a key={l.label} href={l.href || base + "#demonstracao"} onClick={(e) => { e.preventDefault(); closeMenus(); l.action(); }}>{l.label}</a>
           ) : (
             <a key={l.label} href={l.href} onClick={closeMenus}>{l.label}</a>
           )
@@ -27,24 +27,24 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
   return (
     <header className={"site-header" + (scrolled ? " is-scrolled" : "")}>
       <div className="container header-inner">
-        <a className="brand" href="#inicio" aria-label="TerraNexa"><span className="brand-wordmark"><span>Terra</span><span>Nexa</span></span></a>
+        <a className="brand" href={base + "#inicio"} aria-label="TerraNexa"><span className="brand-wordmark"><span>Terra</span><span>Nexa</span></span></a>
         <button className={"menu-toggle" + (menuOpen ? " is-open" : "")} type="button" aria-label="Abrir menu" onClick={() => setMenuOpen(!menuOpen)}>
           <span></span><span></span><span></span>
         </button>
         <nav className={"main-navigation" + (menuOpen ? " is-open" : "")} aria-label="Navegação principal">
-          <a href="#inicio">Início</a>
+          <a href={base + "#inicio"}>Início</a>
           <Group id="sol" label="Soluções" links={[
-            { label: "Visão integrada", href: "#plataforma" },
-            { label: "Módulos da plataforma", href: "#modulos" },
-            { label: "Produto em ação", href: "#produto" },
+            { label: "Visão integrada", href: base + "#plataforma" },
+            { label: "Módulos da plataforma", href: base + "#modulos" },
+            { label: "Produto em ação", href: base + "#produto" },
           ]} />
           <Group id="rec" label="Recursos" links={[
-            { label: "Tecnologia no campo", href: "#campo" },
-            { label: "Resultados operacionais", href: "#resultados" },
+            { label: "Tecnologia no campo", href: base + "#campo" },
+            { label: "Resultados operacionais", href: base + "#resultados" },
             { label: "Falar com a TerraNexa", action: onDemo },
           ]} />
-          <a href="#plataforma">Plataforma</a>
-          <a href="#contato">Contato</a>
+          <a href={base + "#plataforma"}>Plataforma</a>
+          <a href={base + "#contato"}>Contato</a>
           <a className="nav-platform-access" href="https://app.terranexa.com.br" target="_blank" rel="noopener noreferrer" onClick={closeMenus}>Acessar plataforma</a>
         </nav>
         <div className="header-actions">
@@ -248,7 +248,7 @@ function DemoCTA({ onDemo }) {
 }
 
 /* ---------------- Footer ---------------- */
-function Footer({ onDemo }) {
+function Footer({ onDemo, base = "" }) {
   return (
     <footer className="site-footer" id="contato">
       <div className="container footer-grid">
@@ -258,15 +258,15 @@ function Footer({ onDemo }) {
         </div>
         <div>
           <strong>Plataforma</strong>
-          <a href="#plataforma">Visão integrada</a>
-          <a href="#modulos">Módulos</a>
-          <a href="#produto">Produto em ação</a>
+          <a href={base + "#plataforma"}>Visão integrada</a>
+          <a href={base + "#modulos"}>Módulos</a>
+          <a href={base + "#produto"}>Produto em ação</a>
         </div>
         <div>
           <strong>Contato</strong>
           <a href="mailto:contato@terranexa.com.br">contato@terranexa.com.br</a>
           <a href="https://wa.me/5589999915435" target="_blank" rel="noopener noreferrer">Fale conosco no WhatsApp</a>
-          <a href="#demonstracao" onClick={(e) => { e.preventDefault(); onDemo(); }}>Solicitar demonstração</a>
+          <a href={base + "#demonstracao"} onClick={(e) => { e.preventDefault(); onDemo(); }}>Solicitar demonstração</a>
           <a href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Acessar plataforma</a>
         </div>
       </div>
@@ -277,7 +277,7 @@ function Footer({ onDemo }) {
           <a href="/cookies">Cookies</a>
           <a href="/termos">Termos</a>
           <button type="button" className="cookie-link" onClick={() => window.dispatchEvent(new Event("tnx:cookie-prefs"))}>Preferências de cookies</button>
-          <a href="#inicio">Voltar ao topo ↑</a>
+          <a href={base + "#inicio"}>Voltar ao topo ↑</a>
         </div>
       </div>
     </footer>

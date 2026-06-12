@@ -3,6 +3,7 @@ import React from "react";
 import { Header, Hero, ProofStrip, Platform, Modules, Product, Results, DemoCTA, Footer } from "./sections.jsx";
 import { Check } from "./icons.jsx";
 import CookieConsent from "./CookieConsent.jsx";
+import { AssinarPlanos, AssinarCadastro } from "./assinar.jsx";
 
 // Endpoint do formulário de demonstração (Supabase Edge Function pública).
 // A chave publicável pode ficar no cliente; a tabela leads tem RLS travado.
@@ -112,20 +113,9 @@ function DemoDialog({ open, onClose }) {
   );
 }
 
-function App() {
-  const [scrolled, setScrolled] = React.useState(false);
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const [openGroup, setOpenGroup] = React.useState(null);
-  const [demoOpen, setDemoOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Scroll-reveal
+/* Conteúdo da homepage (rota "/"). */
+function HomePage({ onDemo }) {
+  // Scroll-reveal — só nas seções da home.
   React.useEffect(() => {
     const els = document.querySelectorAll(".section-copy, .field-visual, .section-heading, .module-card, .result-grid, .demo-panel");
     const io = new IntersectionObserver((entries) => {
@@ -135,22 +125,74 @@ function App() {
     return () => io.disconnect();
   }, []);
 
+  return (
+    <main id="conteudo">
+      <Hero onDemo={onDemo} />
+      <ProofStrip />
+      <Platform />
+      <Modules />
+      <Product />
+      <Results />
+      <DemoCTA onDemo={onDemo} />
+    </main>
+  );
+}
+
+/* Roteador mínimo baseado em history API (sem dependências externas). */
+function useRoute() {
+  const [path, setPath] = React.useState(() => (typeof window !== "undefined" ? window.location.pathname : "/"));
+  React.useEffect(() => {
+    const onPop = () => setPath(window.location.pathname);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  return path;
+}
+
+function navigate(to) {
+  window.history.pushState({}, "", to);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+
+function App() {
+  const [scrolled, setScrolled] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [openGroup, setOpenGroup] = React.useState(null);
+  const [demoOpen, setDemoOpen] = React.useState(false);
+  const rawPath = useRoute();
+  const path = rawPath.replace(/\/+$/, "") || "/";
+  const isHome = path === "/";
+  const base = isHome ? "" : "/";
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Ao trocar de rota, sobe ao topo (exceto quando há âncora).
+  React.useEffect(() => {
+    if (!window.location.hash) window.scrollTo(0, 0);
+  }, [path]);
+
   const openDemo = () => { setMenuOpen(false); setDemoOpen(true); };
+
+  let content;
+  if (path === "/assinar") {
+    content = <AssinarPlanos navigate={navigate} />;
+  } else if (path === "/assinar/cadastro") {
+    content = <AssinarCadastro navigate={navigate} />;
+  } else {
+    content = <HomePage onDemo={openDemo} />;
+  }
 
   return (
     <React.Fragment>
       <a className="skip-link" href="#conteudo" style={{ position: "fixed", top: 10, left: 10, zIndex: 999, transform: "translateY(-140%)" }}>Pular para o conteúdo</a>
-      <Header scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} openGroup={openGroup} setOpenGroup={setOpenGroup} onDemo={openDemo} />
-      <main id="conteudo">
-        <Hero onDemo={openDemo} />
-        <ProofStrip />
-        <Platform />
-        <Modules />
-        <Product />
-        <Results />
-        <DemoCTA onDemo={openDemo} />
-      </main>
-      <Footer onDemo={openDemo} />
+      <Header scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} openGroup={openGroup} setOpenGroup={setOpenGroup} onDemo={openDemo} base={base} />
+      {content}
+      <Footer onDemo={openDemo} base={base} />
       <DemoDialog open={demoOpen} onClose={() => setDemoOpen(false)} />
       <CookieConsent />
     </React.Fragment>

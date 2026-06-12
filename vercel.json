@@ -9,5 +9,9 @@
       "destination": "https://app.terranexa.com.br/login",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    { "source": "/assinar", "destination": "/index.html" },
+    { "source": "/assinar/cadastro", "destination": "/index.html" }
   ]
 }

@@ -352,3 +352,83 @@ button, a { -webkit-tap-highlight-color: transparent; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   Fluxo de assinatura — /assinar (passo 1) e /assinar/cadastro (passo 2).
+   Reaproveita os tokens e o estilo de formulário do modal de demonstração.
+   ============================================================ */
+.assinar { padding: 140px 0 100px; min-height: 100vh; background: var(--bg); }
+.assinar-head { max-width: 720px; margin: 0 auto; text-align: center; }
+.plan-pill { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 24px; padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(232, 168, 76, 0.32); background: rgba(232, 168, 76, 0.1); color: var(--gold-light); font-size: 12.5px; font-weight: 800; letter-spacing: 0.01em; }
+.plan-pill svg { width: 15px; height: 15px; fill: none; stroke: var(--gold-light); stroke-width: 2.4; }
+.assinar-head h1 { margin: 0; font-family: var(--serif); font-size: clamp(38px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.035em; }
+.assinar-head > p { margin: 18px auto 0; max-width: 560px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+.ciclo-toggle { display: inline-flex; gap: 4px; margin: 34px auto 0; padding: 5px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
+.ciclo-toggle button { display: inline-flex; align-items: center; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; padding: 11px 22px; font-size: 14px; font-weight: 700; transition: color .2s ease, background .2s ease; }
+.ciclo-toggle button.is-active { background: rgba(116, 202, 69, 0.16); color: var(--text); }
+.ciclo-badge { margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: var(--gold); color: #13200e; font-size: 10.5px; font-weight: 900; }
+
+.plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 840px; margin: 46px auto 0; }
+.plan-card { position: relative; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(160deg, #102419, #0b1b11); padding: 28px 26px; transition: border-color .2s ease, box-shadow .2s ease; }
+.plan-card--verde.is-selected { border-color: rgba(116, 202, 69, 0.6); box-shadow: 0 0 0 1px rgba(116, 202, 69, 0.4), 0 22px 50px rgba(0, 0, 0, 0.3); }
+.plan-card--azul.is-selected { border-color: rgba(76, 159, 232, 0.6); box-shadow: 0 0 0 1px rgba(76, 159, 232, 0.4), 0 22px 50px rgba(0, 0, 0, 0.3); }
+.plan-accent { font-size: 11px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
+.plan-card--verde .plan-accent { color: var(--green); }
+.plan-card--azul .plan-accent { color: #5aa9ee; }
+.plan-card h3 { margin: 13px 0 6px; font-family: var(--serif); font-size: 26px; }
+.plan-card .plan-desc { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.faixa-list { display: grid; gap: 10px; margin: auto 0 0; padding: 0; list-style: none; }
+.faixa-option { position: relative; display: flex; align-items: center; gap: 13px; border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px; cursor: pointer; color: var(--text); transition: border-color .18s ease, background .18s ease; }
+.faixa-option:hover { border-color: rgba(255, 255, 255, 0.26); }
+.faixa-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.faixa-option input:focus-visible + .faixa-mark { outline: 3px solid rgba(116, 202, 69, 0.6); outline-offset: 3px; }
+.faixa-mark { flex: 0 0 auto; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.32); transition: border-color .18s ease; }
+.faixa-mark::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: transparent; transition: background .18s ease; }
+.plan-card--verde .faixa-option.is-checked { border-color: rgba(116, 202, 69, 0.55); background: rgba(116, 202, 69, 0.08); }
+.plan-card--azul .faixa-option.is-checked { border-color: rgba(76, 159, 232, 0.55); background: rgba(76, 159, 232, 0.08); }
+.plan-card--verde .faixa-option.is-checked .faixa-mark { border-color: var(--green); }
+.plan-card--azul .faixa-option.is-checked .faixa-mark { border-color: #5aa9ee; }
+.plan-card--verde .faixa-option.is-checked .faixa-mark::after { background: var(--green); }
+.plan-card--azul .faixa-option.is-checked .faixa-mark::after { background: #5aa9ee; }
+.faixa-text { display: flex; flex: 1; align-items: baseline; justify-content: space-between; gap: 10px; }
+.faixa-rotulo { font-size: 13.5px; font-weight: 650; }
+.faixa-preco { font-size: 14px; font-weight: 800; white-space: nowrap; }
+.faixa-preco small { margin-left: 1px; color: var(--muted); font-weight: 600; font-size: 11px; }
+
+.plan-enterprise { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; max-width: 840px; margin: 18px auto 0; border: 1px solid var(--line); border-radius: 20px; background: #0a150d; padding: 24px 26px; }
+.plan-enterprise h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 21px; }
+.plan-enterprise p { margin: 0; max-width: 540px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.plan-enterprise a { display: inline-flex; align-items: center; gap: 6px; color: var(--gold-light); font-size: 14px; font-weight: 800; white-space: nowrap; }
+.plan-enterprise a:hover { color: #fff; }
+
+.assinar-foot { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 840px; margin: 36px auto 0; }
+.assinar-continue { min-width: 240px; }
+.assinar-continue:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+.assinar-note { margin: 0; color: #7c8d80; font-size: 12px; text-align: center; }
+
+/* Passo 2 — cadastro */
+.cadastro { display: flex; padding: 140px 0 100px; min-height: 100vh; background: var(--bg); }
+.cadastro-shell { width: min(560px, calc(100% - 36px)); margin: 0 auto; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 26px; background: #0a1a10; box-shadow: var(--shadow); padding: 36px 38px; }
+.cadastro-summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 24px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, 0.04); padding: 16px 18px; }
+.cadastro-summary .resumo-label { color: var(--green); font-size: 10px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
+.cadastro-summary strong { display: block; margin-top: 5px; font-size: 16px; }
+.cadastro-summary .resumo-sub { color: var(--muted); font-size: 12.5px; }
+.cadastro-summary .alterar { color: var(--gold-light); font-size: 13px; font-weight: 800; white-space: nowrap; }
+.cadastro-summary .alterar:hover { color: #fff; }
+.cadastro-eyebrow { margin: 0; color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
+.cadastro-shell h1 { margin: 10px 0 0; font-family: var(--serif); font-size: 28px; letter-spacing: -0.01em; }
+.cadastro-shell p.cadastro-sub { margin: 9px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+.cadastro .demo-form { margin-top: 26px; }
+.cadastro .demo-form .full { grid-column: 1 / -1; }
+.field-error { grid-column: 1 / -1; margin: -8px 0 0; color: #f0a8a8; font-size: 12px; font-weight: 600; }
+.demo-form .input-invalid { border-color: rgba(240, 120, 120, 0.6); }
+.demo-privacy a { color: var(--gold-light); font-weight: 700; }
+.demo-privacy a:hover { color: #fff; }
+
+@media (max-width: 720px) {
+  .plan-grid { grid-template-columns: 1fr; }
+  .assinar { padding: 120px 0 80px; }
+  .cadastro { padding: 110px 0 70px; }
+  .cadastro-shell { padding: 30px 24px; }
+}
