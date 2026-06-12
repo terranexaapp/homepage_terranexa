@@ -265,7 +265,7 @@ function Footer({ onDemo }) {
         <div>
           <strong>Contato</strong>
           <a href="mailto:contato@terranexa.com.br">contato@terranexa.com.br</a>
-          <a href="https://wa.me/5589999915435" target="_blank" rel="noopener noreferrer">WhatsApp (89) 99991-5435</a>
+          <a href="https://wa.me/5589999915435" target="_blank" rel="noopener noreferrer">Fale conosco no WhatsApp</a>
           <a href="#demonstracao" onClick={(e) => { e.preventDefault(); onDemo(); }}>Solicitar demonstração</a>
           <a href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Acessar plataforma</a>
         </div>
