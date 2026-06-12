@@ -48,7 +48,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
           <a className="nav-platform-access" href="https://app.terranexa.com.br" target="_blank" rel="noopener noreferrer" onClick={closeMenus}>Acessar plataforma</a>
         </nav>
         <div className="header-actions">
-          <a className="button button-ghost button-small" href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Entrar</a>
+          <a className="button button-ghost button-small" href="https://app.terranexa.com.br" target="_blank" rel="noopener noreferrer">Entrar</a>
           <button className="button button-gold button-small" onClick={onDemo}>Solicitar demonstração</button>
         </div>
       </div>
@@ -266,7 +266,7 @@ function Footer({ onDemo }) {
           <strong>Contato</strong>
           <a href="mailto:contato@terranexa.com.br">contato@terranexa.com.br</a>
           <a href="#demonstracao" onClick={(e) => { e.preventDefault(); onDemo(); }}>Solicitar demonstração</a>
-          <a href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Acessar plataforma</a>
+          <a href="https://app.terranexa.com.br" target="_blank" rel="noopener noreferrer">Acessar plataforma</a>
         </div>
       </div>
       <div className="container footer-bottom">
