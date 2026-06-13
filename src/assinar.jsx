@@ -327,6 +327,22 @@ function AssinarPlanos({ navigate }) {
 }
 
 /* ---------------- Passo 2: cadastro ---------------- */
+// Mapeia os códigos de erro do endpoint cadastro-publico para mensagens pt-BR.
+const MENSAGENS_ERRO = {
+  nome_invalido: "Informe seu nome completo.",
+  email_invalido: "Informe um e-mail válido.",
+  senha_curta: "A senha deve ter ao menos 8 caracteres.",
+  documento_invalido: "CPF/CNPJ inválido.",
+  plano_invalido: "Selecione um plano válido.",
+  faixa_invalida: "Faixa de hectares inválida. Volte e selecione outra.",
+  faixa_nao_disponivel: "Essa faixa não está disponível para contratação online. Fale com a gente para o plano Enterprise.",
+  valor_invalido: "Não foi possível calcular o valor do plano. Tente outra faixa.",
+  email_ja_cadastrado: "Este e-mail já possui uma conta. Faça login ou use outro e-mail.",
+  muitas_tentativas: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
+  configuracao_indisponivel: "Estamos com uma instabilidade temporária. Tente novamente em instantes.",
+  json_invalido: "Não foi possível enviar os dados. Recarregue a página e tente novamente.",
+};
+
 function lerSelecao() {
   const q = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
   return {
@@ -395,7 +411,7 @@ function AssinarCadastro({ navigate }) {
       telefone: valores.telefone.trim(),
       senha: valores.senha,
       documento: onlyDigits(valores.documento),
-      documentoTipo: tipoDocumento(valores.documento),
+      documentoTipo: tipoDocumento(valores.documento).toLowerCase(), // backend espera 'cpf'/'cnpj' minúsculo
       planoNome: selecao.planoNome,
       haMin: Number(selecao.haMin) || 0,
       ciclo: selecao.ciclo,
@@ -409,7 +425,8 @@ function AssinarCadastro({ navigate }) {
       let data = {};
       try { data = await res.json(); } catch (_e) { /* corpo vazio */ }
       if (!res.ok) {
-        throw new Error(data.error || data.message || "Não foi possível concluir o cadastro.");
+        const code = data.error || data.message;
+        throw new Error(MENSAGENS_ERRO[code] || "Não foi possível concluir o cadastro. Tente novamente.");
       }
       const link = data.linkCheckout || data.checkoutUrl || data.url || data.data?.linkCheckout;
       if (link) {
