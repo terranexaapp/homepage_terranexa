@@ -373,6 +373,11 @@ function AssinarCadastro({ navigate }) {
   const [enviando, setEnviando] = React.useState(false);
   const [status, setStatus] = React.useState("");
   const [sucesso, setSucesso] = React.useState(false);
+  // Forma de pagamento: só faz sentido escolher no anual. Cartão = recorrente
+  // com trial; Pix/boleto = pagamento único do ano, sem trial.
+  const ehAnual = selecao.ciclo === "anual";
+  const [formaPagamento, setFormaPagamento] = React.useState("cartao");
+  const avulso = ehAnual && formaPagamento === "pix_boleto";
 
   // Redireciona ao passo 1 se chegou sem seleção.
   React.useEffect(() => {
@@ -425,6 +430,7 @@ function AssinarCadastro({ navigate }) {
       planoNome: selecao.planoNome,
       haMin: Number(selecao.haMin) || 0,
       ciclo: selecao.ciclo,
+      formaPagamento: avulso ? "pix_boleto" : "cartao",
     };
     try {
       const res = await fetch(`${BILLING_BASE}?acao=cadastro-publico`, {
@@ -473,8 +479,12 @@ function AssinarCadastro({ navigate }) {
         </div>
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
-        <h1>Comece seus {trialDias} dias grátis</h1>
-        <p className="cadastro-sub">Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas, sem cobrança durante os {trialDias} dias de teste. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso.</p>
+        <h1>{avulso ? "Ative sua conta TerraNexa" : `Comece seus ${trialDias} dias grátis`}</h1>
+        <p className="cadastro-sub">
+          {avulso
+            ? "Preencha seus dados e gere o pagamento do ano via Pix ou boleto, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado."
+            : `Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas, sem cobrança durante os ${trialDias} dias de teste. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso.`}
+        </p>
 
         {sucesso ? (
           <p className="form-status" role="status" style={{ marginTop: 28, fontSize: 15 }}>{status}</p>
@@ -497,6 +507,21 @@ function AssinarCadastro({ navigate }) {
               <input name="documento" type="text" inputMode="numeric" placeholder="000.000.000-00" value={valores.documento} onChange={set("documento")} className={erros.documento ? "input-invalid" : ""} />
             </label>
             {erros.documento && <p className="field-error">{erros.documento}</p>}
+
+            {ehAnual && (
+              <div className="forma-pagamento full">
+                <span className="forma-label">Forma de pagamento</span>
+                <div className="ciclo-toggle" role="group" aria-label="Forma de pagamento">
+                  <button type="button" className={formaPagamento === "cartao" ? "is-active" : ""} aria-pressed={formaPagamento === "cartao"} onClick={() => setFormaPagamento("cartao")}>Cartão</button>
+                  <button type="button" className={formaPagamento === "pix_boleto" ? "is-active" : ""} aria-pressed={formaPagamento === "pix_boleto"} onClick={() => setFormaPagamento("pix_boleto")}>Pix ou boleto</button>
+                </div>
+                <p className="forma-nota">
+                  {avulso
+                    ? "Pagamento único do ano via Pix ou boleto, sem renovação automática. O acesso é liberado assim que o pagamento é confirmado."
+                    : `Renovação automática no cartão, com ${trialDias} dias grátis antes da primeira cobrança.`}
+                </p>
+              </div>
+            )}
 
             <button className="button button-gold" type="submit" disabled={enviando}>{enviando ? "Criando conta…" : "Criar conta e ir ao pagamento →"}</button>
             <p className="demo-privacy">Ao criar a conta você concorda com os <a href="/termos">Termos</a> e a <a href="/privacidade">Política de Privacidade</a> da TerraNexa.</p>

@@ -423,6 +423,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .cadastro .demo-form .full { grid-column: 1 / -1; }
 .field-error { grid-column: 1 / -1; margin: -8px 0 0; color: #f0a8a8; font-size: 12px; font-weight: 600; }
 .demo-form .input-invalid { border-color: rgba(240, 120, 120, 0.6); }
+/* Forma de pagamento (passo 2, só no ciclo anual). */
+.forma-pagamento { grid-column: 1 / -1; display: grid; gap: 10px; margin: 2px 0 0; }
+.forma-pagamento .forma-label { color: #d7e2d8; font-size: 13px; font-weight: 650; }
+.forma-pagamento .ciclo-toggle { margin: 0; align-self: start; }
+.forma-pagamento .forma-nota { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
 .demo-privacy a { color: var(--gold-light); font-weight: 700; }
 .demo-privacy a:hover { color: #fff; }
 
