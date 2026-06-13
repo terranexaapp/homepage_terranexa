@@ -6,7 +6,7 @@ import { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integrati
 const LOGO = "assets/terranexa-logo-footer.svg";
 
 /* ---------------- Header ---------------- */
-function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDemo, base = "" }) {
+function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onPlanos, base = "" }) {
   const closeMenus = () => { setOpenGroup(null); setMenuOpen(false); };
   const Group = ({ id, label, links }) => (
     <div className={"nav-group" + (openGroup === id ? " is-open" : "")}>
@@ -41,7 +41,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
           <Group id="rec" label="Recursos" links={[
             { label: "Tecnologia no campo", href: base + "#campo" },
             { label: "Resultados operacionais", href: base + "#resultados" },
-            { label: "Falar com a TerraNexa", action: onDemo },
+            { label: "Falar com a TerraNexa", href: base + "#contato" },
           ]} />
           <a href={base + "#plataforma"}>Plataforma</a>
           <a href={base + "#contato"}>Contato</a>
@@ -49,7 +49,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
         </nav>
         <div className="header-actions">
           <a className="button button-ghost button-small" href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Entrar</a>
-          <button className="button button-gold button-small" onClick={onDemo}>Solicitar demonstração</button>
+          <button className="button button-gold button-small" onClick={onPlanos}>Conhecer nossos planos</button>
         </div>
       </div>
     </header>
@@ -57,7 +57,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openGroup, setOpenGroup, onDe
 }
 
 /* ---------------- Hero ---------------- */
-function Hero({ onDemo }) {
+function Hero({ onPlanos }) {
   return (
     <section className="hero" id="inicio">
       <img className="hero-background" src="assets/hero-algodao.webp" srcSet="assets/hero-algodao-768.webp 768w, assets/hero-algodao-1200.webp 1200w, assets/hero-algodao.webp 1672w" sizes="100vw" alt="Produtora no campo de algodão usando a plataforma TerraNexa" fetchpriority="high" decoding="async" />
@@ -67,7 +67,7 @@ function Hero({ onDemo }) {
           <h1>Gestão agrícola <em>inteligente</em> para decisões mais precisas no campo.</h1>
           <p className="hero-description">Gestão de talhões, operações agrícolas, monitoramento e solo em uma única plataforma. Registre e edite informações no campo offline, com sincronização quando houver conexão.</p>
           <div className="hero-actions">
-            <button className="button button-primary" onClick={onDemo}>Começar agora</button>
+            <button className="button button-primary" onClick={onPlanos}>Começar agora</button>
             <a className="button button-glass" href="#produto"><Play /> Ver a plataforma</a>
           </div>
         </div>
@@ -228,7 +228,7 @@ function Results() {
 }
 
 /* ---------------- Demo CTA ---------------- */
-function DemoCTA({ onDemo }) {
+function DemoCTA({ onPlanos }) {
   return (
     <section className="demo section" id="demonstracao">
       <div className="container">
@@ -238,8 +238,8 @@ function DemoCTA({ onDemo }) {
           <div className="demo-copy">
             <p className="section-label section-label-gold">Pronto para transformar sua gestão?</p>
             <h2>Leve inteligência do escritório para cada decisão no campo.</h2>
-            <p>Conheça a plataforma em uma demonstração orientada à sua operação.</p>
-            <button className="button button-gold demo-cta-button" type="button" onClick={onDemo}>Solicitar demonstração</button>
+            <p>Conheça nossos planos e comece com 30 dias grátis, no plano ideal para a sua operação.</p>
+            <button className="button button-gold demo-cta-button" type="button" onClick={onPlanos}>Conhecer nossos planos</button>
           </div>
         </div>
       </div>
@@ -248,7 +248,7 @@ function DemoCTA({ onDemo }) {
 }
 
 /* ---------------- Footer ---------------- */
-function Footer({ onDemo, base = "" }) {
+function Footer({ onPlanos, base = "" }) {
   return (
     <footer className="site-footer" id="contato">
       <div className="container footer-grid">
@@ -266,7 +266,7 @@ function Footer({ onDemo, base = "" }) {
           <strong>Contato</strong>
           <a href="mailto:contato@terranexa.com.br">contato@terranexa.com.br</a>
           <a href="https://wa.me/5589999915435" target="_blank" rel="noopener noreferrer">Fale conosco no WhatsApp</a>
-          <a href={base + "#demonstracao"} onClick={(e) => { e.preventDefault(); onDemo(); }}>Solicitar demonstração</a>
+          <a href="/assinar" onClick={(e) => { e.preventDefault(); onPlanos(); }}>Conhecer nossos planos</a>
           <a href="https://www.terranexa.com.br/login" target="_blank" rel="noopener noreferrer">Acessar plataforma</a>
         </div>
       </div>
