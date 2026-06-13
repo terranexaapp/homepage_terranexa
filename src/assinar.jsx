@@ -440,7 +440,7 @@ function AssinarCadastro({ navigate }) {
       try { data = await res.json(); } catch (_e) { /* corpo vazio */ }
       if (!res.ok) {
         const code = data.error || data.message;
-        throw new Error(MENSAGENS_ERRO[code] || "Não foi possível concluir o cadastro. Tente novamente.");
+        throw new Error(MENSAGENS_ERRO[code] || `Não foi possível concluir o cadastro (${code || "erro"}). Tente novamente.`);
       }
       // Redireciona ao checkout hospedado do Asaas para salvar o cartão. Sem
       // cobrança agora; a 1ª cobrança só no fim do trial.
