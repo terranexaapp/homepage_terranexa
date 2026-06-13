@@ -92,6 +92,16 @@ function validaDocumento(value) {
   return tipoDocumento(value) === "CNPJ" ? validaCNPJ(value) : validaCPF(value);
 }
 
+// Mesma política de senha do Supabase Auth usada no app: mín. 8 caracteres com
+// maiúscula, minúscula, número e símbolo. O backend (cadastro-publico) aplica a
+// mesma regra no servidor.
+const SENHA_REQUISITOS =
+  "A senha precisa ter no mínimo 8 caracteres e incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e um símbolo.";
+function validaSenha(value) {
+  const v = String(value || "");
+  return v.length >= 8 && /[a-z]/.test(v) && /[A-Z]/.test(v) && /\d/.test(v) && /[^A-Za-z0-9]/.test(v);
+}
+
 /* ---------------- Planos: leitura do Supabase + normalização ---------------- */
 // Descrições de apoio (as tabelas não têm copy de marketing).
 const DESCRICOES = {
@@ -332,6 +342,8 @@ const MENSAGENS_ERRO = {
   nome_invalido: "Informe seu nome completo.",
   email_invalido: "Informe um e-mail válido.",
   senha_curta: "A senha deve ter ao menos 8 caracteres.",
+  senha_fraca:
+    "A senha precisa ter no mínimo 8 caracteres e incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e um símbolo.",
   documento_invalido: "CPF/CNPJ inválido.",
   plano_invalido: "Selecione um plano válido.",
   faixa_invalida: "Faixa de hectares inválida. Volte e selecione outra.",
@@ -393,7 +405,7 @@ function AssinarCadastro({ navigate }) {
     if (!valores.nome.trim()) e.nome = "Informe seu nome completo.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valores.email.trim())) e.email = "Informe um e-mail válido.";
     if (onlyDigits(valores.telefone).length < 10) e.telefone = "Informe um telefone válido com DDD.";
-    if (valores.senha.length < 8) e.senha = "A senha deve ter ao menos 8 caracteres.";
+    if (!validaSenha(valores.senha)) e.senha = SENHA_REQUISITOS;
     if (valores.confirma !== valores.senha) e.confirma = "As senhas não conferem.";
     if (!validaDocumento(valores.documento)) e.documento = "CPF/CNPJ inválido.";
     setErros(e);
@@ -482,7 +494,7 @@ function AssinarCadastro({ navigate }) {
             {(erros.email || erros.telefone) && <p className="field-error">{erros.email || erros.telefone}</p>}
 
             <label>Senha
-              <input name="senha" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" value={valores.senha} onChange={set("senha")} className={erros.senha ? "input-invalid" : ""} />
+              <input name="senha" type="password" autoComplete="new-password" placeholder="Mín. 8 caracteres, com maiúscula, minúscula, número e símbolo" value={valores.senha} onChange={set("senha")} className={erros.senha ? "input-invalid" : ""} />
             </label>
             <label>Confirme sua senha
               <input name="confirma" type="password" autoComplete="new-password" placeholder="Repita a senha" value={valores.confirma} onChange={set("confirma")} className={erros.confirma ? "input-invalid" : ""} />
