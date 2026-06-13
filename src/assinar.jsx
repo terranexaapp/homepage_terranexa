@@ -5,8 +5,16 @@
 import React from "react";
 import { Check } from "./icons.jsx";
 
-/* Endpoint público de billing (já em produção no backend terranexa). */
+/* Endpoint público de billing (já em produção no backend terranexa).
+   Usado no passo 2 para o cadastro público + checkout Asaas. */
 const BILLING_BASE = "https://app.terranexa.com.br/api/billing";
+
+/* Os planos são lidos direto do Supabase público (chave publicável; tabelas
+   com RLS de leitura liberada apenas para SELECT em anon). */
+const SUPABASE_URL = "https://wqnhzbwrsjwcvhnbzwtb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_IuWhkC5_5lggizFYoaDahw_HVRtR4oc";
+const TRIAL_DIAS_FALLBACK = 30;
+const LIMITE_HA_FALLBACK = 3000;
 
 /* ---------------- Helpers ---------------- */
 const onlyDigits = (v) => (v || "").toString().replace(/\D+/g, "");
@@ -84,96 +92,104 @@ function validaDocumento(value) {
   return tipoDocumento(value) === "CNPJ" ? validaCNPJ(value) : validaCPF(value);
 }
 
-/* ---------------- Planos: fetch + normalização ---------------- */
-// Conjunto de fallback usado se o endpoint estiver indisponível ou bloqueado
-// por CORS. Mantém a página funcional mesmo offline.
-const PLANOS_FALLBACK = [
-  {
-    nome: "Essencial",
-    cor: "verde",
-    descricao: "O essencial para organizar talhões, operações e custos da fazenda.",
-    faixas: [
-      { rotulo: "Até 500 ha", haMin: 0, precoMensal: 199, precoAnual: 1990 },
-      { rotulo: "501 a 1.500 ha", haMin: 501, precoMensal: 349, precoAnual: 3490 },
-      { rotulo: "1.501 a 3.000 ha", haMin: 1501, precoMensal: 549, precoAnual: 5490 },
-    ],
-  },
-  {
-    nome: "Profissional",
-    cor: "azul",
-    descricao: "Gestão completa com monitoramento, solo e inteligência agronômica.",
-    faixas: [
-      { rotulo: "Até 500 ha", haMin: 0, precoMensal: 399, precoAnual: 3990 },
-      { rotulo: "501 a 1.500 ha", haMin: 501, precoMensal: 649, precoAnual: 6490 },
-      { rotulo: "1.501 a 3.000 ha", haMin: 1501, precoMensal: 949, precoAnual: 9490 },
-    ],
-  },
-];
+/* ---------------- Planos: leitura do Supabase + normalização ---------------- */
+// Descrições de apoio (as tabelas não têm copy de marketing).
+const DESCRICOES = {
+  Essencial: "O essencial para organizar talhões, operações e custos da fazenda.",
+  Profissional: "Gestão completa com monitoramento, solo e inteligência agronômica.",
+};
 
-function num(...vals) {
-  for (const v of vals) {
-    if (v === 0) return 0;
-    if (v != null && v !== "" && !Number.isNaN(Number(v))) return Number(v);
+// Cores de destaque por ordem do plano (mantém os tokens do site).
+const CORES_PLANO = ["verde", "azul"];
+
+// Conjunto de fallback (espelha planos_comerciais/planos_faixas) usado se o
+// Supabase estiver indisponível. Mantém a página correta mesmo offline.
+const DADOS_FALLBACK = {
+  trialDias: TRIAL_DIAS_FALLBACK,
+  limiteHa: LIMITE_HA_FALLBACK,
+  planos: [
+    {
+      nome: "Essencial",
+      cor: "verde",
+      descricao: DESCRICOES.Essencial,
+      faixas: [
+        { rotulo: "Até 100 ha", haMin: 0, precoMensal: 149, precoAnual: 1490 },
+        { rotulo: "101 a 300 ha", haMin: 101, precoMensal: 249, precoAnual: 2490 },
+        { rotulo: "301 a 700 ha", haMin: 301, precoMensal: 399, precoAnual: 3990 },
+        { rotulo: "701 a 1.500 ha", haMin: 701, precoMensal: 649, precoAnual: 6490 },
+        { rotulo: "1.501 a 3.000 ha", haMin: 1501, precoMensal: 999, precoAnual: 9990 },
+      ],
+    },
+    {
+      nome: "Profissional",
+      cor: "azul",
+      descricao: DESCRICOES.Profissional,
+      faixas: [
+        { rotulo: "Até 100 ha", haMin: 0, precoMensal: 209, precoAnual: 2090 },
+        { rotulo: "101 a 300 ha", haMin: 101, precoMensal: 349, precoAnual: 3490 },
+        { rotulo: "301 a 700 ha", haMin: 301, precoMensal: 559, precoAnual: 5590 },
+        { rotulo: "701 a 1.500 ha", haMin: 701, precoMensal: 909, precoAnual: 9090 },
+        { rotulo: "1.501 a 3.000 ha", haMin: 1501, precoMensal: 1399, precoAnual: 13990 },
+      ],
+    },
+    { nome: "Cooperativa Enterprise", cor: "enterprise", enterprise: true, descricao: "", faixas: [] },
+  ],
+};
+
+function rotuloFaixa(haMin, haMax) {
+  const f = (n) => Number(n).toLocaleString("pt-BR");
+  if (haMax == null) return `Acima de ${f(haMin - 1)} ha`;
+  if (!haMin) return `Até ${f(haMax)} ha`;
+  return `${f(haMin)} a ${f(haMax)} ha`;
+}
+
+function montarDados(comerciais, faixas, config) {
+  const cfg = Object.fromEntries((config || []).map((c) => [c.chave, c.valor]));
+  const trialDias = Number(cfg.dias_trial) || TRIAL_DIAS_FALLBACK;
+  const limiteHa = Number(cfg.limite_autoservico_hectares) || LIMITE_HA_FALLBACK;
+
+  const planos = [];
+  let corIdx = 0;
+  let enterprise = null;
+  for (const pc of comerciais || []) {
+    const fx = (faixas || [])
+      .filter((f) => f.plano_nome === pc.nome && f.autoservico && f.preco_mensal_centavos > 0)
+      .sort((a, b) => a.ha_min - b.ha_min)
+      .map((f) => ({
+        rotulo: rotuloFaixa(f.ha_min, f.ha_max),
+        haMin: f.ha_min,
+        precoMensal: Math.round(f.preco_mensal_centavos / 100),
+        precoAnual: Math.round(f.preco_anual_centavos / 100),
+      }));
+    if (fx.length) {
+      planos.push({ nome: pc.nome, cor: CORES_PLANO[corIdx++ % CORES_PLANO.length], descricao: DESCRICOES[pc.nome] || "", faixas: fx });
+    } else if (!enterprise) {
+      enterprise = { nome: pc.nome, cor: "enterprise", enterprise: true, descricao: "", faixas: [] };
+    }
   }
-  return undefined;
+  if (enterprise) planos.push(enterprise);
+  return { planos, trialDias, limiteHa };
 }
 
-function inferirCor(nome = "") {
-  const n = nome.toLowerCase();
-  if (/profiss|pro\b|avan|premium/.test(n)) return "azul";
-  return "verde";
-}
-
-function normalizarFaixa(f) {
-  const haMin = num(f.haMin, f.ha_min, f.min, f.de, f.from, f.ha) ?? 0;
-  const precoMensal = num(f.precoMensal, f.preco_mensal, f.mensal, f.valorMensal, f.valor_mensal, f.priceMonthly, f.preco, f.valor);
-  const precoAnual = num(f.precoAnual, f.preco_anual, f.anual, f.valorAnual, f.valor_anual, f.priceYearly);
-  if (precoMensal === undefined && precoAnual === undefined) return null;
-  return {
-    rotulo: f.rotulo || f.label || f.nome || f.faixa || (haMin ? `A partir de ${haMin} ha` : "Faixa"),
-    haMin,
-    precoMensal: precoMensal ?? Math.round((precoAnual || 0) / 10),
-    precoAnual: precoAnual ?? Math.round((precoMensal || 0) * 10),
-  };
-}
-
-function normalizarPlanos(raw) {
-  let list = raw;
-  if (!Array.isArray(list)) {
-    list = raw?.planos || raw?.data?.planos || raw?.data || raw?.items || [];
-  }
-  if (!Array.isArray(list) || !list.length) return null;
-  const planos = list
-    .map((p) => {
-      const nome = p.nome || p.name || p.titulo || p.plano || "Plano";
-      const faixasRaw = p.faixas || p.tiers || p.ranges || p.precos || p.planos || [];
-      const faixas = (Array.isArray(faixasRaw) ? faixasRaw : []).map(normalizarFaixa).filter(Boolean);
-      const enterprise = !!p.enterprise || /enterprise|corporativ|sob consulta/i.test(nome);
-      return {
-        nome,
-        cor: p.cor || p.color || inferirCor(nome),
-        descricao: p.descricao || p.description || p.subtitulo || "",
-        enterprise,
-        faixas,
-      };
-    })
-    .filter((p) => p.enterprise || p.faixas.length);
-  return planos.length ? planos : null;
-}
-
-async function carregarPlanos() {
+async function carregarDados() {
   try {
-    const res = await fetch(`${BILLING_BASE}?acao=planos`, {
-      headers: { Accept: "application/json" },
-    });
-    if (!res.ok) throw new Error("status " + res.status);
-    const data = await res.json();
-    const planos = normalizarPlanos(data);
-    if (planos) return planos;
+    const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Accept: "application/json" };
+    const base = `${SUPABASE_URL}/rest/v1`;
+    const [pcRes, pfRes, cfRes] = await Promise.all([
+      fetch(`${base}/planos_comerciais?select=nome,cor,ordem,ativo&ativo=eq.true&order=ordem`, { headers }),
+      fetch(`${base}/planos_faixas?select=plano_nome,ha_min,ha_max,preco_mensal_centavos,preco_anual_centavos,autoservico,ordem&order=ordem`, { headers }),
+      fetch(`${base}/config_comercial?select=chave,valor`, { headers }),
+    ]);
+    if (!pcRes.ok || !pfRes.ok) throw new Error("supabase indisponível");
+    const comerciais = await pcRes.json();
+    const faixas = await pfRes.json();
+    const config = cfRes.ok ? await cfRes.json() : [];
+    const dados = montarDados(comerciais, faixas, config);
+    if (dados.planos.some((p) => !p.enterprise)) return dados;
   } catch (_e) {
     /* silencioso — cai no fallback */
   }
-  return PLANOS_FALLBACK;
+  return DADOS_FALLBACK;
 }
 
 /* Economia anual aproximada (para a badge do toggle), derivada do 1º plano. */
@@ -197,7 +213,7 @@ function precoExibido(faixa, ciclo) {
 
 /* ---------------- Passo 1: escolha do plano ---------------- */
 function AssinarPlanos({ navigate }) {
-  const [planos, setPlanos] = React.useState(null);
+  const [dados, setDados] = React.useState(null);
   const [ciclo, setCiclo] = React.useState(() => {
     const q = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
     return q.get("ciclo") === "anual" ? "anual" : "mensal";
@@ -206,14 +222,17 @@ function AssinarPlanos({ navigate }) {
 
   React.useEffect(() => {
     let ativo = true;
-    carregarPlanos().then((p) => {
-      if (ativo) setPlanos(p);
+    carregarDados().then((d) => {
+      if (ativo) setDados(d);
     });
     return () => {
       ativo = false;
     };
   }, []);
 
+  const planos = dados?.planos || null;
+  const trialDias = dados?.trialDias || TRIAL_DIAS_FALLBACK;
+  const limiteHa = dados?.limiteHa || LIMITE_HA_FALLBACK;
   const pagaveis = (planos || []).filter((p) => !p.enterprise && p.faixas.length);
   const enterprise = (planos || []).find((p) => p.enterprise);
   const economia = planos ? economiaAnualPct(planos) : 0;
@@ -232,9 +251,9 @@ function AssinarPlanos({ navigate }) {
     <main className="assinar" id="conteudo">
       <div className="container">
         <div className="assinar-head">
-          <span className="plan-pill"><Check /> 7 dias grátis — sem cobrança imediata</span>
+          <span className="plan-pill"><Check /> {trialDias} dias grátis — sem cobrança imediata</span>
           <h1>Escolha o plano ideal para a sua operação.</h1>
-          <p>Comece com 7 dias grátis. Selecione o plano e a faixa de área da sua fazenda — você só confirma o cartão no fim.</p>
+          <p>Comece com {trialDias} dias grátis. Selecione o plano e a faixa de área da sua fazenda — você só confirma o cartão no fim.</p>
 
           <div className="ciclo-toggle" role="group" aria-label="Ciclo de cobrança">
             <button type="button" className={ciclo === "mensal" ? "is-active" : ""} aria-pressed={ciclo === "mensal"} onClick={() => setCiclo("mensal")}>Mensal</button>
@@ -289,7 +308,7 @@ function AssinarPlanos({ navigate }) {
             <div className="plan-enterprise">
               <div>
                 <h3>{enterprise?.nome || "Enterprise"}</h3>
-                <p>{enterprise?.descricao || "Para grandes áreas e grupos: faixas personalizadas, integrações e suporte dedicado."}</p>
+                <p>{enterprise?.descricao || `Para áreas acima de ${limiteHa.toLocaleString("pt-BR")} ha, cooperativas e grupos: faixas personalizadas, integrações e suporte dedicado.`}</p>
               </div>
               <a href="mailto:contato@terranexa.com.br?subject=Plano%20Enterprise%20TerraNexa">Falar <span aria-hidden="true">↗</span></a>
             </div>
@@ -298,7 +317,7 @@ function AssinarPlanos({ navigate }) {
               <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
                 Continuar <span aria-hidden="true">→</span>
               </button>
-              <p className="assinar-note">Sem cobrança nos 7 dias de teste. Cancele quando quiser.</p>
+              <p className="assinar-note">Sem cobrança nos {trialDias} dias de teste. Cancele quando quiser.</p>
             </div>
           </>
         )}
@@ -319,7 +338,7 @@ function lerSelecao() {
 
 function AssinarCadastro({ navigate }) {
   const selecao = React.useMemo(lerSelecao, []);
-  const [planos, setPlanos] = React.useState(null);
+  const [dados, setDados] = React.useState(null);
   const [valores, setValores] = React.useState({ nome: "", email: "", telefone: "", senha: "", confirma: "", documento: "" });
   const [erros, setErros] = React.useState({});
   const [enviando, setEnviando] = React.useState(false);
@@ -332,16 +351,18 @@ function AssinarCadastro({ navigate }) {
   }, []); // eslint-disable-line
 
   React.useEffect(() => {
-    carregarPlanos().then(setPlanos);
+    carregarDados().then(setDados);
   }, []);
 
+  const trialDias = dados?.trialDias || TRIAL_DIAS_FALLBACK;
   const resumoPreco = React.useMemo(() => {
+    const planos = dados?.planos;
     if (!planos) return null;
     const plano = planos.find((p) => p.nome === selecao.planoNome);
     const faixa = plano?.faixas?.find((f) => String(f.haMin) === String(selecao.haMin)) || plano?.faixas?.[0];
     if (!plano || !faixa) return null;
     return { faixa, preco: precoExibido(faixa, selecao.ciclo) };
-  }, [planos, selecao]);
+  }, [dados, selecao]);
 
   const set = (campo) => (e) => {
     let v = e.target.value;
@@ -423,7 +444,7 @@ function AssinarCadastro({ navigate }) {
         </div>
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
-        <h1>Comece seus 7 dias grátis</h1>
+        <h1>Comece seus {trialDias} dias grátis</h1>
         <p className="cadastro-sub">Preencha seus dados para criar a conta. Você confirma o cartão no próximo passo — sem cobrança durante o teste.</p>
 
         {sucesso ? (
