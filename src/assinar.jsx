@@ -369,7 +369,7 @@ function lerSelecao() {
 function AssinarCadastro({ navigate }) {
   const selecao = React.useMemo(lerSelecao, []);
   const [dados, setDados] = React.useState(null);
-  const [valores, setValores] = React.useState({ nome: "", email: "", telefone: "", senha: "", confirma: "", documento: "" });
+  const [valores, setValores] = React.useState({ nome: "", email: "", telefone: "", documento: "" });
   const [erros, setErros] = React.useState({});
   const [enviando, setEnviando] = React.useState(false);
   const [status, setStatus] = React.useState("");
@@ -407,8 +407,6 @@ function AssinarCadastro({ navigate }) {
     if (!valores.nome.trim()) e.nome = "Informe seu nome completo.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valores.email.trim())) e.email = "Informe um e-mail válido.";
     if (onlyDigits(valores.telefone).length < 10) e.telefone = "Informe um telefone válido com DDD.";
-    if (!validaSenha(valores.senha)) e.senha = SENHA_REQUISITOS;
-    if (valores.confirma !== valores.senha) e.confirma = "As senhas não conferem.";
     if (!validaDocumento(valores.documento)) e.documento = "CPF/CNPJ inválido.";
     setErros(e);
     return Object.keys(e).length === 0;
@@ -423,7 +421,6 @@ function AssinarCadastro({ navigate }) {
       nome: valores.nome.trim(),
       email: valores.email.trim(),
       telefone: valores.telefone.trim(),
-      senha: valores.senha,
       documento: onlyDigits(valores.documento),
       documentoTipo: tipoDocumento(valores.documento).toLowerCase(), // backend espera 'cpf'/'cnpj' minúsculo
       planoNome: selecao.planoNome,
@@ -478,7 +475,7 @@ function AssinarCadastro({ navigate }) {
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
         <h1>Comece seus {trialDias} dias grátis</h1>
-        <p className="cadastro-sub">Preencha seus dados. No próximo passo você cadastra o cartão em ambiente seguro do Asaas, sem cobrança durante os {trialDias} dias de teste; você pode cancelar antes.</p>
+        <p className="cadastro-sub">Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas, sem cobrança durante os {trialDias} dias de teste. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso.</p>
 
         {sucesso ? (
           <p className="form-status" role="status" style={{ marginTop: 28, fontSize: 15 }}>{status}</p>
@@ -496,14 +493,6 @@ function AssinarCadastro({ navigate }) {
               <input name="telefone" type="tel" inputMode="tel" autoComplete="tel" placeholder="(00) 00000-0000" value={valores.telefone} onChange={set("telefone")} className={erros.telefone ? "input-invalid" : ""} />
             </label>
             {(erros.email || erros.telefone) && <p className="field-error">{erros.email || erros.telefone}</p>}
-
-            <label>Senha
-              <input name="senha" type="password" autoComplete="new-password" placeholder="Mín. 8 caracteres, com maiúscula, minúscula, número e símbolo" value={valores.senha} onChange={set("senha")} className={erros.senha ? "input-invalid" : ""} />
-            </label>
-            <label>Confirme sua senha
-              <input name="confirma" type="password" autoComplete="new-password" placeholder="Repita a senha" value={valores.confirma} onChange={set("confirma")} className={erros.confirma ? "input-invalid" : ""} />
-            </label>
-            {(erros.senha || erros.confirma) && <p className="field-error">{erros.senha || erros.confirma}</p>}
 
             <label className="full">CPF / CNPJ
               <input name="documento" type="text" inputMode="numeric" placeholder="000.000.000-00" value={valores.documento} onChange={set("documento")} className={erros.documento ? "input-invalid" : ""} />
