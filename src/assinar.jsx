@@ -102,10 +102,6 @@ function validaSenha(value) {
   return v.length >= 8 && /[a-z]/.test(v) && /[A-Z]/.test(v) && /\d/.test(v) && /[^A-Za-z0-9]/.test(v);
 }
 
-const formatCartaoNumero = (v) => onlyDigits(v).slice(0, 19).replace(/(\d{4})(?=\d)/g, "$1 ");
-const formatValidade = (v) => onlyDigits(v).slice(0, 4).replace(/^(\d{2})(\d)/, "$1/$2");
-const formatCep = (v) => onlyDigits(v).slice(0, 8).replace(/^(\d{5})(\d)/, "$1-$2");
-
 /* ---------------- Planos: leitura do Supabase + normalização ---------------- */
 // Descrições de apoio (as tabelas não têm copy de marketing).
 const DESCRICOES = {
@@ -357,10 +353,8 @@ const MENSAGENS_ERRO = {
   muitas_tentativas: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
   configuracao_indisponivel: "Estamos com uma instabilidade temporária. Tente novamente em instantes.",
   json_invalido: "Não foi possível enviar os dados. Recarregue a página e tente novamente.",
-  cartao_invalido: "Confira os dados do cartão (número, validade e CVV).",
-  cartao_recusado: "Não foi possível validar seu cartão. Confira os dados ou tente outro cartão.",
-  endereco_invalido: "Confira o CEP e o número do endereço de cobrança.",
-  telefone_invalido: "Informe um telefone com DDD para o cadastro do cartão.",
+  telefone_invalido: "Informe um telefone válido com DDD.",
+  checkout_falhou: "Não foi possível iniciar o pagamento agora. Tente novamente em instantes.",
 };
 
 function lerSelecao() {
@@ -375,10 +369,7 @@ function lerSelecao() {
 function AssinarCadastro({ navigate }) {
   const selecao = React.useMemo(lerSelecao, []);
   const [dados, setDados] = React.useState(null);
-  const [valores, setValores] = React.useState({
-    nome: "", email: "", telefone: "", senha: "", confirma: "", documento: "",
-    cartaoNumero: "", cartaoNome: "", cartaoValidade: "", cartaoCvv: "", cep: "", numeroEndereco: "",
-  });
+  const [valores, setValores] = React.useState({ nome: "", email: "", telefone: "", senha: "", confirma: "", documento: "" });
   const [erros, setErros] = React.useState({});
   const [enviando, setEnviando] = React.useState(false);
   const [status, setStatus] = React.useState("");
@@ -407,10 +398,6 @@ function AssinarCadastro({ navigate }) {
     let v = e.target.value;
     if (campo === "telefone") v = formatTelefone(v);
     if (campo === "documento") v = formatDocumento(v);
-    if (campo === "cartaoNumero") v = formatCartaoNumero(v);
-    if (campo === "cartaoValidade") v = formatValidade(v);
-    if (campo === "cartaoCvv") v = onlyDigits(v).slice(0, 4);
-    if (campo === "cep") v = formatCep(v);
     setValores((s) => ({ ...s, [campo]: v }));
     setErros((s) => ({ ...s, [campo]: undefined }));
   };
@@ -423,18 +410,6 @@ function AssinarCadastro({ navigate }) {
     if (!validaSenha(valores.senha)) e.senha = SENHA_REQUISITOS;
     if (valores.confirma !== valores.senha) e.confirma = "As senhas não conferem.";
     if (!validaDocumento(valores.documento)) e.documento = "CPF/CNPJ inválido.";
-    if (onlyDigits(valores.cartaoNumero).length < 13) e.cartaoNumero = "Número do cartão inválido.";
-    if (!valores.cartaoNome.trim()) e.cartaoNome = "Informe o nome impresso no cartão.";
-    {
-      const [mm, aa] = (valores.cartaoValidade || "").split("/");
-      const mes = Number(mm), ano = Number(aa);
-      if (!mm || !aa || mm.length !== 2 || aa.length !== 2 || mes < 1 || mes > 12 || Number.isNaN(ano)) {
-        e.cartaoValidade = "Validade inválida (MM/AA).";
-      }
-    }
-    if (onlyDigits(valores.cartaoCvv).length < 3) e.cartaoCvv = "CVV inválido.";
-    if (onlyDigits(valores.cep).length !== 8) e.cep = "CEP inválido.";
-    if (!valores.numeroEndereco.trim()) e.numeroEndereco = "Informe o número.";
     setErros(e);
     return Object.keys(e).length === 0;
   }
@@ -454,15 +429,6 @@ function AssinarCadastro({ navigate }) {
       planoNome: selecao.planoNome,
       haMin: Number(selecao.haMin) || 0,
       ciclo: selecao.ciclo,
-      cartao: {
-        numero: onlyDigits(valores.cartaoNumero),
-        nome: valores.cartaoNome.trim(),
-        mes: (valores.cartaoValidade.split("/")[0] || "").trim(),
-        ano: (valores.cartaoValidade.split("/")[1] || "").trim(),
-        cvv: onlyDigits(valores.cartaoCvv),
-      },
-      cep: onlyDigits(valores.cep),
-      numeroEndereco: valores.numeroEndereco.trim(),
     };
     try {
       const res = await fetch(`${BILLING_BASE}?acao=cadastro-publico`, {
@@ -476,19 +442,16 @@ function AssinarCadastro({ navigate }) {
         const code = data.error || data.message;
         throw new Error(MENSAGENS_ERRO[code] || "Não foi possível concluir o cadastro. Tente novamente.");
       }
-      // Fluxo legado (sem cartão no cadastro): redireciona para a fatura.
-      const link = data.linkCheckout || data.checkoutUrl || data.url || data.data?.linkCheckout;
+      // Redireciona ao checkout hospedado do Asaas para salvar o cartão. Sem
+      // cobrança agora; a 1ª cobrança só no fim do trial.
+      const link = data.checkoutUrl || data.linkCheckout || data.url;
       if (link) {
-        setStatus("Conta criada! Redirecionando para o cadastro do cartão…");
+        setStatus("Conta criada! Redirecionando para o pagamento seguro…");
         window.location.href = link;
         return;
       }
-      // Cartão já salvo na criação: trial iniciado, sem cobrança agora.
-      const venc = data.trialAte ? new Date(data.trialAte).toLocaleDateString("pt-BR") : null;
       setSucesso(true);
-      setStatus(
-        `Conta criada! Seu teste grátis começou, sem cobrança agora. A primeira cobrança será em ${venc || `${trialDias} dias`} no cartão informado. Acesse app.terranexa.com.br para começar.`
-      );
+      setStatus("Conta criada! Em instantes você receberá um e-mail para concluir o cadastro do cartão.");
     } catch (err) {
       setStatus(err.message || "Não foi possível concluir o cadastro. Tente novamente.");
     } finally {
@@ -515,7 +478,7 @@ function AssinarCadastro({ navigate }) {
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
         <h1>Comece seus {trialDias} dias grátis</h1>
-        <p className="cadastro-sub">Preencha seus dados e o cartão. Sem cobrança durante os {trialDias} dias de teste; a primeira cobrança só no fim, e você pode cancelar antes.</p>
+        <p className="cadastro-sub">Preencha seus dados. No próximo passo você cadastra o cartão em ambiente seguro do Asaas, sem cobrança durante os {trialDias} dias de teste; você pode cancelar antes.</p>
 
         {sucesso ? (
           <p className="form-status" role="status" style={{ marginTop: 28, fontSize: 15 }}>{status}</p>
@@ -547,36 +510,7 @@ function AssinarCadastro({ navigate }) {
             </label>
             {erros.documento && <p className="field-error">{erros.documento}</p>}
 
-            <p className="cadastro-eyebrow" style={{ marginTop: 10 }}>Pagamento</p>
-            <p className="cadastro-sub" style={{ marginTop: 0 }}>Cartão salvo com segurança no Asaas. Sem cobrança durante o teste de {trialDias} dias.</p>
-
-            <label className="full">Número do cartão
-              <input name="cartaoNumero" type="text" inputMode="numeric" autoComplete="cc-number" placeholder="0000 0000 0000 0000" value={valores.cartaoNumero} onChange={set("cartaoNumero")} className={erros.cartaoNumero ? "input-invalid" : ""} />
-            </label>
-            {erros.cartaoNumero && <p className="field-error">{erros.cartaoNumero}</p>}
-
-            <label className="full">Nome impresso no cartão
-              <input name="cartaoNome" type="text" autoComplete="cc-name" placeholder="Como está no cartão" value={valores.cartaoNome} onChange={set("cartaoNome")} className={erros.cartaoNome ? "input-invalid" : ""} />
-            </label>
-            {erros.cartaoNome && <p className="field-error">{erros.cartaoNome}</p>}
-
-            <label>Validade (MM/AA)
-              <input name="cartaoValidade" type="text" inputMode="numeric" autoComplete="cc-exp" placeholder="MM/AA" value={valores.cartaoValidade} onChange={set("cartaoValidade")} className={erros.cartaoValidade ? "input-invalid" : ""} />
-            </label>
-            <label>Código (CVV)
-              <input name="cartaoCvv" type="text" inputMode="numeric" autoComplete="cc-csc" placeholder="000" value={valores.cartaoCvv} onChange={set("cartaoCvv")} className={erros.cartaoCvv ? "input-invalid" : ""} />
-            </label>
-            {(erros.cartaoValidade || erros.cartaoCvv) && <p className="field-error">{erros.cartaoValidade || erros.cartaoCvv}</p>}
-
-            <label>CEP de cobrança
-              <input name="cep" type="text" inputMode="numeric" autoComplete="postal-code" placeholder="00000-000" value={valores.cep} onChange={set("cep")} className={erros.cep ? "input-invalid" : ""} />
-            </label>
-            <label>Número
-              <input name="numeroEndereco" type="text" inputMode="numeric" placeholder="Nº" value={valores.numeroEndereco} onChange={set("numeroEndereco")} className={erros.numeroEndereco ? "input-invalid" : ""} />
-            </label>
-            {(erros.cep || erros.numeroEndereco) && <p className="field-error">{erros.cep || erros.numeroEndereco}</p>}
-
-            <button className="button button-gold" type="submit" disabled={enviando}>{enviando ? "Criando conta…" : "Criar conta e começar o teste →"}</button>
+            <button className="button button-gold" type="submit" disabled={enviando}>{enviando ? "Criando conta…" : "Criar conta e ir ao pagamento →"}</button>
             <p className="demo-privacy">Ao criar a conta você concorda com os <a href="/termos">Termos</a> e a <a href="/privacidade">Política de Privacidade</a> da TerraNexa.</p>
             <p className="form-status" role="status">{status}</p>
           </form>
