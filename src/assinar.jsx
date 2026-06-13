@@ -354,7 +354,6 @@ const MENSAGENS_ERRO = {
   configuracao_indisponivel: "Estamos com uma instabilidade temporária. Tente novamente em instantes.",
   json_invalido: "Não foi possível enviar os dados. Recarregue a página e tente novamente.",
   telefone_invalido: "Informe um telefone válido com DDD.",
-  checkout_falhou: "Não foi possível iniciar o pagamento agora. Tente novamente em instantes.",
 };
 
 function lerSelecao() {
@@ -436,8 +435,8 @@ function AssinarCadastro({ navigate }) {
       let data = {};
       try { data = await res.json(); } catch (_e) { /* corpo vazio */ }
       if (!res.ok) {
-        const code = data.error || data.message;
-        throw new Error(MENSAGENS_ERRO[code] || `Não foi possível concluir o cadastro (${code || "erro"}). Tente novamente.`);
+        const code = data.error;
+        throw new Error(MENSAGENS_ERRO[code] || data.message || `Não foi possível concluir o cadastro (${code || "erro"}).`);
       }
       // Redireciona ao checkout hospedado do Asaas para salvar o cartão. Sem
       // cobrança agora; a 1ª cobrança só no fim do trial.
