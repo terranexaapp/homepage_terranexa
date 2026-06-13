@@ -11,7 +11,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/assinar", "destination": "/index.html" },
-    { "source": "/assinar/cadastro", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

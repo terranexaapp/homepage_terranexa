@@ -154,6 +154,25 @@ function navigate(to) {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
+/* Página 404 dentro do SPA (rota desconhecida). O fallback de roteamento da
+   Vercel serve index.html para qualquer caminho sem arquivo estático, então o
+   próprio app decide o que renderizar; páginas estáticas (/termos, /privacidade,
+   /cookies) continuam servidas direto pela Vercel. */
+function NotFound({ navigate }) {
+  return (
+    <main id="conteudo" style={{ minHeight: "60vh", display: "grid", placeItems: "center", textAlign: "center", padding: "96px 0" }}>
+      <div className="container">
+        <p style={{ margin: 0, fontFamily: "var(--serif)", fontSize: 88, lineHeight: 1, fontWeight: 800, color: "var(--green)" }}>404</p>
+        <h1 style={{ margin: "8px 0 0" }}>Página não encontrada</h1>
+        <p style={{ color: "var(--muted)", maxWidth: 520, margin: "14px auto 28px" }}>
+          O endereço que você tentou acessar não existe ou foi movido. Vamos te levar de volta ao caminho certo.
+        </p>
+        <a className="button button-gold" href="/" onClick={(e) => { e.preventDefault(); navigate("/"); }}>Ir para a página inicial</a>
+      </div>
+    </main>
+  );
+}
+
 function App() {
   const [scrolled, setScrolled] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -183,8 +202,10 @@ function App() {
     content = <AssinarPlanos navigate={navigate} />;
   } else if (path === "/assinar/cadastro") {
     content = <AssinarCadastro navigate={navigate} />;
-  } else {
+  } else if (path === "/") {
     content = <HomePage onDemo={openDemo} />;
+  } else {
+    content = <NotFound navigate={navigate} />;
   }
 
   return (
