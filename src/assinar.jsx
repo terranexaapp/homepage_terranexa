@@ -261,10 +261,10 @@ function AssinarPlanos({ navigate }) {
     <main className="assinar" id="conteudo">
       <div className="container">
         <div className="assinar-head">
-          <span className="plan-pill"><Check /> {ciclo === "mensal" ? `${trialDias} dias grátis, sem cobrança imediata` : "Plano anual, cobrança única no ano"}</span>
+          <span className="plan-pill"><Check /> {ciclo === "mensal" ? "1º mês por R$ 9,99" : "Plano anual, cobrança única no ano"}</span>
           <h1>Escolha o plano ideal para a sua operação.</h1>
           <p>{ciclo === "mensal"
-            ? `Comece com ${trialDias} dias grátis. Selecione o plano e a faixa de área da sua fazenda, você só confirma o cartão no fim.`
+            ? "No plano mensal o primeiro mês sai por R$ 9,99; a partir do segundo, o valor do plano. Selecione o plano e a faixa de área da sua fazenda."
             : "Selecione o plano e a faixa de área da sua fazenda. No plano anual a cobrança é feita na contratação, sem período de teste."}</p>
 
           <div className="ciclo-toggle" role="group" aria-label="Ciclo de cobrança">
@@ -329,7 +329,7 @@ function AssinarPlanos({ navigate }) {
               <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
                 Continuar <span aria-hidden="true">→</span>
               </button>
-              <p className="assinar-note">{ciclo === "mensal" ? `Sem cobrança nos ${trialDias} dias de teste. Cancele quando quiser.` : "Cobrança anual na contratação. Acesso garantido pelo ano."}</p>
+              <p className="assinar-note">{ciclo === "mensal" ? "Primeiro mês por R$ 9,99, depois o valor do plano. Cancele quando quiser." : "Cobrança anual na contratação. Acesso garantido pelo ano."}</p>
             </div>
           </>
         )}
@@ -481,13 +481,13 @@ function AssinarCadastro({ navigate }) {
         </div>
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
-        <h1>{ehAnual ? "Ative sua conta TerraNexa" : `Comece seus ${trialDias} dias grátis`}</h1>
+        <h1>{ehAnual ? "Ative sua conta TerraNexa" : "Comece por R$ 9,99 no primeiro mês"}</h1>
         <p className="cadastro-sub">
           {avulso
             ? "Preencha seus dados e gere o pagamento do ano via Pix ou boleto, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado."
             : ehAnual
               ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. A cobrança anual é feita na contratação e o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
-              : `Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas, sem cobrança durante os ${trialDias} dias de teste. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso.`}
+              : "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. Você paga R$ 9,99 no primeiro mês e, a partir do segundo, o valor do plano. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso."}
         </p>
 
         {sucesso ? (
