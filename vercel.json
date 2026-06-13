@@ -2,7 +2,6 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "cleanUrls": true,
   "redirects": [
     {
       "source": "/login",
@@ -11,6 +10,9 @@
     }
   ],
   "rewrites": [
+    { "source": "/termos", "destination": "/termos.html" },
+    { "source": "/privacidade", "destination": "/privacidade.html" },
+    { "source": "/cookies", "destination": "/cookies.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
