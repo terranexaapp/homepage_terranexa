@@ -264,7 +264,7 @@ function AssinarPlanos({ navigate }) {
           <span className="plan-pill"><Check /> {ciclo === "mensal" ? "1º mês por R$ 9,99" : "Plano anual, cobrança única no ano"}</span>
           <h1>Escolha o plano ideal para a sua operação.</h1>
           <p>{ciclo === "mensal"
-            ? "No plano mensal o primeiro mês sai por R$ 9,99; a partir do segundo, o valor do plano. Selecione o plano e a faixa de área da sua fazenda."
+            ? "No plano mensal, novos usuários pagam R$ 9,99 no primeiro mês; a partir do segundo, o valor do plano. Selecione o plano e a faixa de área da sua fazenda."
             : "Selecione o plano e a faixa de área da sua fazenda. No plano anual a cobrança é feita na contratação, sem período de teste."}</p>
 
           <div className="ciclo-toggle" role="group" aria-label="Ciclo de cobrança">
@@ -274,7 +274,7 @@ function AssinarPlanos({ navigate }) {
             </button>
           </div>
           {ciclo === "anual" && (
-            <p className="ciclo-nota">O plano anual é cobrado integral na contratação. O primeiro mês por R$ 9,99 vale apenas no plano mensal.</p>
+            <p className="ciclo-nota">O plano anual é cobrado integral na contratação. O primeiro mês por R$ 9,99 vale apenas no plano mensal e para novos usuários.</p>
           )}
         </div>
 
@@ -332,7 +332,7 @@ function AssinarPlanos({ navigate }) {
               <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
                 Continuar <span aria-hidden="true">→</span>
               </button>
-              <p className="assinar-note">{ciclo === "mensal" ? "Primeiro mês por R$ 9,99, depois o valor do plano. Cancele quando quiser." : "Cobrança anual integral na contratação, sem o 1º mês promocional. Acesso garantido pelo ano."}</p>
+              <p className="assinar-note">{ciclo === "mensal" ? "Primeiro mês por R$ 9,99 para novos usuários, depois o valor do plano. Cancele quando quiser." : "Cobrança anual integral na contratação, sem o 1º mês promocional. Acesso garantido pelo ano."}</p>
             </div>
           </>
         )}
