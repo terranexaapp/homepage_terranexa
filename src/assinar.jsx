@@ -261,9 +261,11 @@ function AssinarPlanos({ navigate }) {
     <main className="assinar" id="conteudo">
       <div className="container">
         <div className="assinar-head">
-          <span className="plan-pill"><Check /> {trialDias} dias grátis — sem cobrança imediata</span>
+          <span className="plan-pill"><Check /> {ciclo === "mensal" ? `${trialDias} dias grátis, sem cobrança imediata` : "Plano anual, cobrança única no ano"}</span>
           <h1>Escolha o plano ideal para a sua operação.</h1>
-          <p>Comece com {trialDias} dias grátis. Selecione o plano e a faixa de área da sua fazenda — você só confirma o cartão no fim.</p>
+          <p>{ciclo === "mensal"
+            ? `Comece com ${trialDias} dias grátis. Selecione o plano e a faixa de área da sua fazenda, você só confirma o cartão no fim.`
+            : "Selecione o plano e a faixa de área da sua fazenda. No plano anual a cobrança é feita na contratação, sem período de teste."}</p>
 
           <div className="ciclo-toggle" role="group" aria-label="Ciclo de cobrança">
             <button type="button" className={ciclo === "mensal" ? "is-active" : ""} aria-pressed={ciclo === "mensal"} onClick={() => setCiclo("mensal")}>Mensal</button>
@@ -327,7 +329,7 @@ function AssinarPlanos({ navigate }) {
               <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
                 Continuar <span aria-hidden="true">→</span>
               </button>
-              <p className="assinar-note">Sem cobrança nos {trialDias} dias de teste. Cancele quando quiser.</p>
+              <p className="assinar-note">{ciclo === "mensal" ? `Sem cobrança nos ${trialDias} dias de teste. Cancele quando quiser.` : "Cobrança anual na contratação. Acesso garantido pelo ano."}</p>
             </div>
           </>
         )}
@@ -479,11 +481,13 @@ function AssinarCadastro({ navigate }) {
         </div>
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
-        <h1>{avulso ? "Ative sua conta TerraNexa" : `Comece seus ${trialDias} dias grátis`}</h1>
+        <h1>{ehAnual ? "Ative sua conta TerraNexa" : `Comece seus ${trialDias} dias grátis`}</h1>
         <p className="cadastro-sub">
           {avulso
             ? "Preencha seus dados e gere o pagamento do ano via Pix ou boleto, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado."
-            : `Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas, sem cobrança durante os ${trialDias} dias de teste. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso.`}
+            : ehAnual
+              ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. A cobrança anual é feita na contratação e o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
+              : `Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas, sem cobrança durante os ${trialDias} dias de teste. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso.`}
         </p>
 
         {sucesso ? (
@@ -518,7 +522,7 @@ function AssinarCadastro({ navigate }) {
                 <p className="forma-nota">
                   {avulso
                     ? "Pagamento único do ano via Pix ou boleto, sem renovação automática. O acesso é liberado assim que o pagamento é confirmado."
-                    : `Renovação automática no cartão, com ${trialDias} dias grátis antes da primeira cobrança.`}
+                    : "Renovação automática no cartão. A cobrança anual é feita na contratação, sem período de teste."}
                 </p>
               </div>
             )}
