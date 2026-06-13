@@ -273,6 +273,9 @@ function AssinarPlanos({ navigate }) {
               Anual{economia > 0 && <span className="ciclo-badge">-{economia}%</span>}
             </button>
           </div>
+          {ciclo === "anual" && (
+            <p className="ciclo-nota">O plano anual é cobrado integral na contratação. O primeiro mês por R$ 9,99 vale apenas no plano mensal.</p>
+          )}
         </div>
 
         {!planos ? (
@@ -329,7 +332,7 @@ function AssinarPlanos({ navigate }) {
               <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
                 Continuar <span aria-hidden="true">→</span>
               </button>
-              <p className="assinar-note">{ciclo === "mensal" ? "Primeiro mês por R$ 9,99, depois o valor do plano. Cancele quando quiser." : "Cobrança anual na contratação. Acesso garantido pelo ano."}</p>
+              <p className="assinar-note">{ciclo === "mensal" ? "Primeiro mês por R$ 9,99, depois o valor do plano. Cancele quando quiser." : "Cobrança anual integral na contratação, sem o 1º mês promocional. Acesso garantido pelo ano."}</p>
             </div>
           </>
         )}
@@ -486,7 +489,7 @@ function AssinarCadastro({ navigate }) {
           {avulso
             ? "Preencha seus dados e gere o pagamento do ano via Pix ou boleto, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado."
             : ehAnual
-              ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. A cobrança anual é feita na contratação e o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
+              ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. A cobrança anual é integral na contratação, sem o primeiro mês promocional de R$ 9,99 (que vale só no mensal), e o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
               : "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. Você paga R$ 9,99 no primeiro mês e, a partir do segundo, o valor do plano. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso."}
         </p>
 
@@ -522,7 +525,7 @@ function AssinarCadastro({ navigate }) {
                 <p className="forma-nota">
                   {avulso
                     ? "Pagamento único do ano via Pix ou boleto, sem renovação automática. O acesso é liberado assim que o pagamento é confirmado."
-                    : "Renovação automática no cartão. A cobrança anual é feita na contratação, sem período de teste."}
+                    : "Renovação automática no cartão. A cobrança anual é integral na contratação, sem o 1º mês de R$ 9,99 (que vale só no mensal)."}
                 </p>
               </div>
             )}
