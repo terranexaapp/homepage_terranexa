@@ -482,6 +482,9 @@ function AssinarCadastro({ navigate }) {
               {resumoPreco && <> — {formatBRL(resumoPreco.preco.valor)}{resumoPreco.preco.sufixo}</>}
             </strong>
             <span className="resumo-sub">{resumoPreco ? resumoPreco.faixa.rotulo : `A partir de ${selecao.haMin || 0} ha`}</span>
+            {selecao.ciclo === "anual" && resumoPreco?.preco?.nota && (
+              <span className="resumo-anual">{resumoPreco.preco.nota}</span>
+            )}
           </div>
           <a className="alterar" href="/assinar" onClick={(e) => { e.preventDefault(); navigate(`/assinar?plano=${encodeURIComponent(selecao.planoNome)}&ciclo=${selecao.ciclo}`); }}>Alterar</a>
         </div>
