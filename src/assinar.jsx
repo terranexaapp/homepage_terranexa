@@ -308,7 +308,10 @@ function AssinarPlanos({ navigate }) {
                               <span className="faixa-mark" aria-hidden="true" />
                               <span className="faixa-text">
                                 <span className="faixa-rotulo">{faixa.rotulo}</span>
-                                <span className="faixa-preco">{formatBRL(preco.valor)}<small>{preco.sufixo}</small></span>
+                                <span className="faixa-preco">
+                                  <span className="faixa-valor">{formatBRL(preco.valor)}<small>{preco.sufixo}</small></span>
+                                  {ciclo === "anual" && preco.nota && <span className="faixa-anual">{preco.nota}</span>}
+                                </span>
                               </span>
                             </label>
                           </li>

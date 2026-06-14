@@ -392,10 +392,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .plan-card--azul .faixa-option.is-checked .faixa-mark { border-color: #5aa9ee; }
 .plan-card--verde .faixa-option.is-checked .faixa-mark::after { background: var(--green); }
 .plan-card--azul .faixa-option.is-checked .faixa-mark::after { background: #5aa9ee; }
-.faixa-text { display: flex; flex: 1; align-items: baseline; justify-content: space-between; gap: 10px; }
+.faixa-text { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 10px; }
 .faixa-rotulo { font-size: 13.5px; font-weight: 650; }
-.faixa-preco { font-size: 14px; font-weight: 800; white-space: nowrap; }
-.faixa-preco small { margin-left: 1px; color: var(--muted); font-weight: 600; font-size: 11px; }
+.faixa-preco { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.faixa-valor { font-size: 14px; font-weight: 800; white-space: nowrap; }
+.faixa-valor small { margin-left: 1px; color: var(--muted); font-weight: 600; font-size: 11px; }
+.faixa-anual { color: var(--muted); font-weight: 600; font-size: 10.5px; line-height: 1.2; white-space: nowrap; }
 
 .plan-enterprise { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; max-width: 840px; margin: 18px auto 0; border: 1px solid var(--line); border-radius: 20px; background: #0a150d; padding: 24px 26px; }
 .plan-enterprise h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 21px; }
