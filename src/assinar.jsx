@@ -530,7 +530,7 @@ function AssinarCadastro({ navigate }) {
                 </div>
                 <p className="forma-nota">
                   {avulso
-                    ? "Pix ou boleto: pagamento único do ano, sem renovação automática. Você recebe uma cobrança que pode pagar por Pix (na hora) ou boleto (compensa em 1 a 3 dias úteis)."
+                    ? "Pix ou boleto: pagamento único do ano, sem renovação automática. Pagando por Pix, o acesso libera na hora; por boleto, após a compensação (1 a 3 dias úteis)."
                     : "Renovação automática no cartão. A cobrança anual é integral na contratação, sem o 1º mês de R$ 9,99 (que vale só no mensal)."}
                 </p>
               </div>
