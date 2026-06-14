@@ -385,7 +385,7 @@ function AssinarCadastro({ navigate }) {
   // com trial; Pix/boleto = pagamento único do ano, sem trial.
   const ehAnual = selecao.ciclo === "anual";
   const [formaPagamento, setFormaPagamento] = React.useState("cartao");
-  const avulso = ehAnual && (formaPagamento === "pix" || formaPagamento === "boleto");
+  const avulso = ehAnual && formaPagamento === "pix_boleto";
 
   // Redireciona ao passo 1 se chegou sem seleção.
   React.useEffect(() => {
@@ -493,7 +493,7 @@ function AssinarCadastro({ navigate }) {
         <h1>{ehAnual ? "Ative sua conta TerraNexa" : "Comece por R$ 9,99 no primeiro mês"}</h1>
         <p className="cadastro-sub">
           {avulso
-            ? `Preencha seus dados e gere o pagamento do ano via ${formaPagamento === "boleto" ? "boleto" : "Pix"}, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado.`
+            ? "Preencha seus dados e gere o pagamento do ano via Pix ou boleto, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado."
             : ehAnual
               ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. A cobrança anual é integral na contratação, sem o primeiro mês promocional de R$ 9,99 (que vale só no mensal), e o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
               : "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. Você paga R$ 9,99 no primeiro mês e, a partir do segundo, o valor do plano. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso."}
@@ -526,15 +526,12 @@ function AssinarCadastro({ navigate }) {
                 <span className="forma-label">Forma de pagamento</span>
                 <div className="ciclo-toggle" role="group" aria-label="Forma de pagamento">
                   <button type="button" className={formaPagamento === "cartao" ? "is-active" : ""} aria-pressed={formaPagamento === "cartao"} onClick={() => setFormaPagamento("cartao")}>Cartão</button>
-                  <button type="button" className={formaPagamento === "pix" ? "is-active" : ""} aria-pressed={formaPagamento === "pix"} onClick={() => setFormaPagamento("pix")}>Pix</button>
-                  <button type="button" className={formaPagamento === "boleto" ? "is-active" : ""} aria-pressed={formaPagamento === "boleto"} onClick={() => setFormaPagamento("boleto")}>Boleto</button>
+                  <button type="button" className={formaPagamento === "pix_boleto" ? "is-active" : ""} aria-pressed={formaPagamento === "pix_boleto"} onClick={() => setFormaPagamento("pix_boleto")}>Pix ou boleto</button>
                 </div>
                 <p className="forma-nota">
-                  {formaPagamento === "pix"
-                    ? "Pix: pagamento único do ano, sem renovação automática. O acesso é liberado assim que o Pix é confirmado."
-                    : formaPagamento === "boleto"
-                      ? "Boleto: pagamento único do ano, sem renovação automática. O acesso é liberado quando o boleto compensa (1 a 3 dias úteis)."
-                      : "Renovação automática no cartão. A cobrança anual é integral na contratação, sem o 1º mês de R$ 9,99 (que vale só no mensal)."}
+                  {avulso
+                    ? "Pix ou boleto: pagamento único do ano, sem renovação automática. Você recebe uma cobrança que pode pagar por Pix (na hora) ou boleto (compensa em 1 a 3 dias úteis)."
+                    : "Renovação automática no cartão. A cobrança anual é integral na contratação, sem o 1º mês de R$ 9,99 (que vale só no mensal)."}
                 </p>
               </div>
             )}
