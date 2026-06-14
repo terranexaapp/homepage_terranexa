@@ -238,7 +238,7 @@ function DemoCTA({ onPlanos }) {
           <div className="demo-copy">
             <p className="section-label section-label-gold">Pronto para transformar sua gestão?</p>
             <h2>Leve inteligência do escritório para cada decisão no campo.</h2>
-            <p>Conheça nossos planos e comece com 30 dias grátis, no plano ideal para a sua operação.</p>
+            <p>Conheça nossos planos e comece com o primeiro mês por R$ 9,99, no plano ideal para a sua operação.</p>
             <button className="button button-gold demo-cta-button" type="button" onClick={onPlanos}>Conhecer nossos planos</button>
           </div>
         </div>
