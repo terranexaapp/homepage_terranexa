@@ -193,7 +193,7 @@ function Product() {
             return (
             <article className="product-card" key={img}>
               <img src={"/assets/" + img} srcSet={`${base}-480.webp 480w, ${base}-720.webp 720w, /assets/${img} 900w`} sizes="(min-width: 1101px) 400px, (min-width: 621px) 520px, 88vw" alt={title} loading="lazy" decoding="async" />
-              <div className="product-card-caption"><span>{tag}</span><h3>{title}</h3></div>
+              <div className="product-card-caption"><span>{tag}</span></div>
             </article>
             );
           })}
