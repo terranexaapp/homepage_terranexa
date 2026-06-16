@@ -105,8 +105,8 @@ function validaSenha(value) {
 /* ---------------- Planos: leitura do Supabase + normalização ---------------- */
 // Descrições de apoio (as tabelas não têm copy de marketing).
 const DESCRICOES = {
-  Essencial: "Para sair da planilha: talhões, scouting, solo e chuva, e o caderno de campo com custo por operação.",
-  Profissional: "Tudo do Essencial mais insumos e estoque, dashboard e recomendação por cultura.",
+  Essencial: "Tudo para operar a fazenda: talhões, scouting, solo, chuva, insumos, equipe e o caderno de campo com custo por operação.",
+  Profissional: "Tudo do Essencial mais a camada de inteligência: saúde da lavoura (NDVI), recomendação de fertilizantes e dashboard executivo.",
 };
 
 // Cores de destaque por ordem do plano (mantém os tokens do site).
