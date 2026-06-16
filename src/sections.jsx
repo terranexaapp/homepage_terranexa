@@ -1,7 +1,7 @@
 /* TerraNexa homepage — section components. Faithful recreation of the
    production marketing page, factored into composable sections. */
 import React from "react";
-import { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers } from "./icons.jsx";
+import { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Rain, Farm, Order, Soil, Layers } from "./icons.jsx";
 
 const LOGO = "/assets/terranexa-logo-footer.svg";
 
@@ -64,8 +64,8 @@ function Hero({ onPlanos }) {
       <div className="hero-shade"></div>
       <div className="container hero-layout hero-layout-solo">
         <div className="hero-copy">
-          <h1>Gestão agrícola <em>inteligente</em> para decisões mais precisas no campo.</h1>
-          <p className="hero-description">Gestão de talhões, operações agrícolas, monitoramento e solo em uma única plataforma. Registre e edite informações no campo offline, com sincronização quando houver conexão.</p>
+          <h1>A ferramenta <em>técnica</em> do campo: scouting, solo e chuva, mesmo sem sinal.</h1>
+          <p className="hero-description">Registre pragas, doenças e daninhas por ponto de GPS, interprete solo e chuva por talhão e gere recomendação por cultura. Tudo funciona offline no campo e sincroniza ao reconectar.</p>
           <div className="hero-actions">
             <button className="button button-primary" onClick={onPlanos}>Começar agora</button>
             <a className="button button-glass" href="#produto"><Play /> Ver a plataforma</a>
@@ -80,10 +80,10 @@ function Hero({ onPlanos }) {
 /* ---------------- Proof strip ---------------- */
 function ProofStrip() {
   const items = [
-    ["Mapas", "Leitura territorial por talhão"],
-    ["Operações", "Planejamento e custo real"],
-    ["Monitoramento", "Ocorrências com evidências"],
-    ["Solo", "Análise e recomendação técnica"],
+    ["Scouting", "Praga, daninha e perda por ponto de GPS"],
+    ["Solo", "Análise, interpolação e recomendação"],
+    ["Chuva", "Pluviômetros e mapa interpolado"],
+    ["Mapa", "Talhões por satélite, KML e área real"],
   ];
   return (
     <section className="proof-strip" aria-label="Principais recursos">
@@ -97,18 +97,18 @@ function ProofStrip() {
 /* ---------------- Platform ---------------- */
 function Platform() {
   const benefits = [
-    [<Integration />, "Operação integrada", "Ordens, insumos, custos e equipes no mesmo fluxo."],
-    [<Trend />, "Decisões no campo, mesmo offline", "Registre e consulte informações sem conexão; sincroniza ao reconectar."],
-    [<Leaf />, "Campo mais produtivo", "Tecnologia simples para executar melhor e reduzir perdas."],
+    [<Layers />, "Scouting que vira decisão", "Praga, doença, daninha, estande e perda por ponto, com severidade no mapa."],
+    [<Trend />, "Offline de verdade", "Registre e consulte sem sinal no campo; sincroniza sozinho ao reconectar."],
+    [<Soil />, "Solo e chuva interpolados", "Mapas de fertilidade e de chuva por talhão, com recomendação por cultura."],
   ];
   return (
     <section className="platform section" id="plataforma">
       <div className="platform-glow" aria-hidden="true"></div>
       <div className="container platform-layout">
         <div className="section-copy">
-          <p className="section-label">Do campo ao controle</p>
-          <h2>Uma visão única para toda a sua operação.</h2>
-          <p>A TerraNexa conecta dados de campo, equipe, custos e recomendações agronômicas. Menos planilhas dispersas. Mais decisão com contexto.</p>
+          <p className="section-label">Do campo à decisão</p>
+          <h2>Tudo o que a visita técnica precisa, num app só.</h2>
+          <p>Scouting, solo, chuva e talhões conectados pela cultura de cada área, trocando a planilha dispersa por decisão com contexto agronômico.</p>
           <ul className="benefit-list">
             {benefits.map(([icon, t, s]) => (
               <li key={t}><span className="benefit-icon">{icon}</span><div><strong>{t}</strong><span>{s}</span></div></li>
@@ -131,10 +131,12 @@ function Platform() {
 /* ---------------- Modules ---------------- */
 function Modules() {
   const mods = [
-    [<Farm />, "Fazendas e talhões", "Mapa, áreas, culturas, safras e histórico por propriedade."],
-    [<Order />, "Caderno de campo", "Registre suas atividades agrícolas, do plantio à colheita."],
-    [<Soil />, "Solo e fertilidade", "Análises, mapas de fertilidade e recomendações técnicas."],
-    [<Layers />, "Monitoramento", "Ocorrências, trilhas, técnicos, vistorias e evidências."],
+    [<Layers />, "Monitoramento e scouting", "Caminhe o talhão e registre praga, doença, daninha, estande e perda por ponto de GPS. Contagem por metro, severidade no mapa de calor, foto e trilha, tudo offline."],
+    [<Soil />, "Solo e fertilidade", "Análises de solo viram mapa de fertilidade interpolado e recomendação por talhão e cultura: calcário, gesso, N, P, K, S, Ca e micronutrientes."],
+    [<Rain />, "Chuva e pluviometria", "Os pluviômetros da fazenda viram um mapa de chuva interpolado, com histórico por talhão e exportação por período."],
+    [<Farm />, "Mapa e talhões", "Importe KML ou KMZ e desenhe sobre o satélite. Área calculada pela geometria, com safra e cultura por talhão."],
+    [<Order />, "Caderno de campo", "Registre as atividades agrícolas, do plantio à colheita, com insumo e custo real por operação."],
+    [<Trend />, "Dashboard e relatórios", "Alertas de talhão sem visita, dano econômico e estoque crítico, e relatórios em PDF prontos para o produtor."],
   ];
   return (
     <section className="modules section" id="modulos">
@@ -207,10 +209,10 @@ function Product() {
 /* ---------------- Results ---------------- */
 function Results() {
   const stats = [
-    ["100% offline", "monitoramento no campo, sem sinal"],
-    ["Por cultura", "catálogo de pragas filtrado por talhão"],
-    ["Scouting por GPS", "ocorrências e trilha em cada ponto"],
-    ["Campo e escritório", "sincroniza sozinho ao reconectar"],
+    ["Offline", "registra no campo sem sinal e sincroniza sozinho"],
+    ["Por cultura", "catálogo e recomendação filtrados pelo talhão"],
+    ["Interpolação", "mapas de solo e de chuva por talhão"],
+    ["Scouting GPS", "ocorrência, trilha e foto em cada ponto"],
   ];
   return (
     <section className="results section" id="resultados">

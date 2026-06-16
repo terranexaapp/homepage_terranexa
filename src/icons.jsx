@@ -14,5 +14,6 @@ const Farm = (p) => (<svg {...S(p)}><path d="m3 11 9-8 9 8v10H3zM8 21v-8h8v8" />
 const Order = (p) => (<svg {...S(p)}><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4m8-4v4M3 10h18" /></svg>);
 const Soil = (p) => (<svg {...S(p)}><path d="M5 18c9 1 14-4 14-14C9 3 4 9 5 18Zm2-1L17 7" /></svg>);
 const Layers = (p) => (<svg {...S(p)}><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4" /></svg>);
+const Rain = (p) => (<svg {...S(p)}><path d="M7 15a4 4 0 0 1 .5-7.97 5 5 0 0 1 9.5 1.3A3.5 3.5 0 0 1 16.5 15H7Z" /><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5" /></svg>);
 
-export { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Farm, Order, Soil, Layers };
+export { Chevron, ChevronLeft, ChevronRight, ChevronDown, Play, Check, Integration, Trend, Leaf, Rain, Farm, Order, Soil, Layers };
