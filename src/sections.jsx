@@ -170,7 +170,7 @@ function Product() {
     ["produto-monitoramento.webp", "Scouting no campo", "Ocorrências, trilha e fotos por ponto"],
     ["produto-solo.webp", "Solo e fertilidade", "Análise, interpolação e recomendação"],
     ["produto-custos.webp", "Custos por operação", "Gasto real por atividade e centro de custo"],
-    ["produto-equipe.webp", "Equipe e execução", "Quem fez cada operação no campo"],
+    ["produto-chuva.webp", "Chuva e pluviometria", "Mapa de chuva por talhão com histórico"],
   ];
   const scroll = (dir) => {
     const el = trackRef.current;
