@@ -216,7 +216,7 @@ function Results() {
     <section className="results section" id="resultados">
       <div className="container">
         <div className="section-heading">
-          <p className="section-label section-label-gold">Gestão que gera resultado</p>
+          <p className="section-label section-label-gold">Gestão técnica que gera resultado</p>
           <h2>Mais clareza para decidir. Mais controle para produzir.</h2>
         </div>
         <div className="result-grid">
