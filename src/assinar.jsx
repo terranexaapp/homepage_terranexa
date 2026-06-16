@@ -105,8 +105,8 @@ function validaSenha(value) {
 /* ---------------- Planos: leitura do Supabase + normalização ---------------- */
 // Descrições de apoio (as tabelas não têm copy de marketing).
 const DESCRICOES = {
-  Essencial: "Para começar no campo: talhões por satélite, scouting de pragas e registro de solo e chuva.",
-  Profissional: "O pacote técnico completo: caderno de campo com custo por operação, recomendação por cultura e dashboard.",
+  Essencial: "Para sair da planilha: talhões, scouting, solo e chuva, e o caderno de campo com custo por operação.",
+  Profissional: "Tudo do Essencial mais insumos e estoque, dashboard e recomendação por cultura.",
 };
 
 // Cores de destaque por ordem do plano (mantém os tokens do site).
