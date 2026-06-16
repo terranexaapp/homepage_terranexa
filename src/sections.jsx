@@ -132,7 +132,7 @@ function Platform() {
 function Modules() {
   const mods = [
     [<Farm />, "Fazendas e talhões", "Mapa, áreas, culturas, safras e histórico por propriedade."],
-    [<Order />, "Ordens de serviço", "Planejamento, execução, prazo, equipe, insumos e custo real."],
+    [<Order />, "Caderno de campo", "Registre suas atividades agrícolas, do plantio à colheita."],
     [<Soil />, "Solo e fertilidade", "Análises, mapas de fertilidade e recomendações técnicas."],
     [<Layers />, "Monitoramento", "Ocorrências, trilhas, técnicos, vistorias e evidências."],
   ];
@@ -207,10 +207,10 @@ function Product() {
 /* ---------------- Results ---------------- */
 function Results() {
   const stats = [
-    ["1 visão", "para toda a operação"],
-    ["4 pilares", "campo, equipe, custos e solo"],
-    ["Rastreável", "do planejamento à execução"],
-    ["Responsiva", "no escritório e no campo"],
+    ["100% offline", "monitoramento no campo, sem sinal"],
+    ["Por cultura", "catálogo de pragas filtrado por talhão"],
+    ["Scouting por GPS", "ocorrências e trilha em cada ponto"],
+    ["Campo e escritório", "sincroniza sozinho ao reconectar"],
   ];
   return (
     <section className="results section" id="resultados">
@@ -236,7 +236,7 @@ function DemoCTA({ onPlanos }) {
           <img src="/assets/cta-casal-campo.webp" srcSet="/assets/cta-casal-campo-768.webp 768w, /assets/cta-casal-campo-1200.webp 1200w, /assets/cta-casal-campo.webp 1600w" sizes="(min-width: 1280px) 1232px, 95vw" alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div className="demo-shade"></div>
           <div className="demo-copy">
-            <p className="section-label section-label-gold">Pronto para transformar sua gestão?</p>
+            <p className="section-label section-label-gold">Pronto para transformar sua gestão técnica?</p>
             <h2>Leve inteligência do escritório para cada decisão no campo.</h2>
             <p>Conheça nossos planos e comece com o primeiro mês por R$ 9,99, no plano ideal para a sua operação.</p>
             <button className="button button-gold demo-cta-button" type="button" onClick={onPlanos}>Conhecer nossos planos</button>
