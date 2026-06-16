@@ -136,7 +136,7 @@ function Modules() {
     [<Rain />, "Chuva e pluviometria", "Os pluviômetros da fazenda viram um mapa de chuva interpolado, com histórico por talhão e exportação por período."],
     [<Farm />, "Mapa e talhões", "Importe KML ou KMZ e desenhe sobre o satélite. Área calculada pela geometria, com safra e cultura por talhão."],
     [<Order />, "Caderno de campo", "Registre as atividades agrícolas, do plantio à colheita, com insumo e custo real por operação."],
-    [<Trend />, "Dashboard e relatórios", "Alertas de talhão sem visita, dano econômico e estoque crítico, e relatórios em PDF prontos para o produtor."],
+    [<Trend />, "Dashboard e alertas", "Talhão sem visita, dano econômico e estoque crítico num painel único, para agir no que é urgente."],
   ];
   return (
     <section className="modules section" id="modulos">
@@ -165,12 +165,12 @@ function Modules() {
 function Product() {
   const trackRef = React.useRef(null);
   const cards = [
-    ["produto-mapas.webp", "Visão territorial", "Mapas inteligentes por talhão"],
-    ["produto-os.webp", "Controle operacional", "Ordens de serviço com custo real"],
-    ["produto-monitoramento.webp", "Campo conectado", "Monitoramento com evidências"],
-    ["produto-solo.webp", "Inteligência agronômica", "Solo e fertilidade com precisão"],
-    ["produto-custos.webp", "Gestão financeira", "Custos organizados por operação"],
-    ["produto-equipe.webp", "Gestão de pessoas", "Equipe e execução no mesmo fluxo"],
+    ["produto-mapas.webp", "Mapa e talhões", "Talhões por satélite, com área e cultura"],
+    ["produto-os.webp", "Caderno de campo", "Operações agrícolas com custo real"],
+    ["produto-monitoramento.webp", "Scouting no campo", "Ocorrências, trilha e fotos por ponto"],
+    ["produto-solo.webp", "Solo e fertilidade", "Análise, interpolação e recomendação"],
+    ["produto-custos.webp", "Custos por operação", "Gasto real por atividade e centro de custo"],
+    ["produto-equipe.webp", "Equipe e execução", "Quem fez cada operação no campo"],
   ];
   const scroll = (dir) => {
     const el = trackRef.current;
@@ -182,7 +182,7 @@ function Product() {
         <div className="product-heading">
           <div>
             <p className="section-label">Produto em ação</p>
-            <h2>Da visão territorial à execução no campo.</h2>
+            <h2>Do scouting ao custo da operação, tela a tela.</h2>
           </div>
           <div className="product-controls" aria-label="Controles da galeria">
             <button type="button" aria-label="Anterior" onClick={() => scroll(-1)}><ChevronLeft /></button>
@@ -256,7 +256,7 @@ function Footer({ onPlanos, base = "" }) {
       <div className="container footer-grid">
         <div className="footer-brand">
           <img src={LOGO} alt="TerraNexa" />
-          <p>Informação confiável. Gestão inteligente. Campo mais produtivo.</p>
+          <p>Informação técnica confiável, do scouting ao custo, para decidir melhor no campo.</p>
         </div>
         <div>
           <strong>Plataforma</strong>

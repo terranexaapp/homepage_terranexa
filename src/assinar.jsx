@@ -105,8 +105,8 @@ function validaSenha(value) {
 /* ---------------- Planos: leitura do Supabase + normalização ---------------- */
 // Descrições de apoio (as tabelas não têm copy de marketing).
 const DESCRICOES = {
-  Essencial: "O essencial para organizar talhões, operações e custos da fazenda.",
-  Profissional: "Gestão completa com monitoramento, solo e inteligência agronômica.",
+  Essencial: "Para começar no campo: talhões por satélite, scouting de pragas e registro de solo e chuva.",
+  Profissional: "O pacote técnico completo: caderno de campo com custo por operação, recomendação por cultura e dashboard.",
 };
 
 // Cores de destaque por ordem do plano (mantém os tokens do site).
