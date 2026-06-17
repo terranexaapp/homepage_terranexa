@@ -206,9 +206,7 @@ Separe sempre **duas cobranças**: a **taxa da Meta** (igual em qualquer caminho
 | BSP nacional (Zenvia/Blip/Gupshup) | margem + às vezes mensalidade | suporte e fatura em real |
 | Meta Cloud API direto | zero | maior volume; troca margem por trabalho de infra |
 
-**Recomendação v1:** começar com **Twilio ou 360dialog**. Não é o mais barato por
-mensagem, mas evita construir integração direta com a Meta antes de o produto existir.
-Migrar para **Meta direto** quando o volume justificar economizar a margem.
+**Decisão (v1): WhatsApp Cloud API direto, sem BSP.** Ver seção 7.1.
 
 O **resumo diário** já minimiza o custo: **1 mensagem Utility por produtor por dia**,
 em vez de uma por talhão/evento. Utility é a categoria mais barata.
@@ -216,6 +214,56 @@ em vez de uma por talhão/evento. Utility é a categoria mais barata.
 > A tabela de preços da Meta muda com frequência (migrou de "por conversa" para "por
 > mensagem"). Confirmar os valores na página oficial de pricing na hora de decidir.
 > A **estrutura** (taxa Meta fixa + margem variável) não muda.
+
+### 7.1 Decisão: Meta Cloud API direto (sem BSP)
+
+**"Dá para fazer sozinho?" Sim — usando a WhatsApp Cloud API, a API oficial da Meta,
+sem Twilio nem nenhum BSP.** BSPs são camadas de conveniência opcionais; não são
+obrigatórios. O único intermediário do qual **não** se foge é a própria Meta — não
+existe API legítima de WhatsApp fora dela.
+
+Esclarecimento importante: a **Cloud API é hospedada pela Meta**. Não hospedamos
+servidor de WhatsApp nem infra de mensageria — só chamamos um endpoint HTTPS
+(`graph.facebook.com`) a partir de uma Edge Function.
+
+| Critério | **Meta Cloud API direto** | Via BSP (Twilio) |
+|---|---|---|
+| Custo por mensagem | só taxa Meta (mais barato) | taxa Meta + margem |
+| Dependência de terceiro | só Meta | Meta + BSP |
+| Setup inicial | um pouco mais (token, webhook) | mais guiado |
+| Manutenção | nossa (token, erros, webhook) | BSP cuida de parte |
+| Controle e portabilidade | total | preso ao BSP |
+| Encaixe com Supabase | excelente (Edge Function → Meta) | também funciona |
+
+**Por que direto, para o TerraNexa:** queremos independência, já temos Supabase, e o
+volume do resumo diário é baixo e previsível. O atrito real (verificação do negócio +
+aprovação do template) existe **nos dois caminhos** — indo direto, economiza a margem
+para sempre e não cria dependência a desfazer depois. BSP só valeria por suporte humano
+na homologação ou recursos extras (chatbot, multiatendimento), que não são o caso aqui.
+
+**Arquitetura com Meta direto (idêntica à seção 2, troca só quem o worker chama):**
+
+```
+[pg_cron 18h] -> cria notificacao_envio (pendente)
+      |
+      v
+[Edge Function "enviar"]  -- HTTPS -->  graph.facebook.com (Cloud API)
+      |                                         |
+      v                                         v
+grava id_externo + status        [Edge Function "webhook"] <- Meta envia status
+```
+
+**Checklist de setup (único):**
+
+1. Conta **Meta Business** + **verificação do negócio** (CNPJ, documentos).
+2. **WABA** (WhatsApp Business Account) + **número dedicado** (não pode estar em uso no
+   app comum do WhatsApp).
+3. **App** no Meta for Developers + **System User token** de longa duração.
+4. **Submeter o template Utility** para aprovação da Meta.
+5. **Edge Function de webhook** (HTTPS) para status e mensagens recebidas.
+
+**O que passamos a manter:** renovação/segurança do token, tratamento de erros e rate
+limits, confiabilidade do webhook (retries/idempotência) e a "quality rating" do número.
 
 ---
 
@@ -249,6 +297,10 @@ R$ 0,15–0,19 e Marketing R$ 0,31–0,38. **Utility é a mais barata**, e a Met
 Pior caso ~**R$ 2,25 por produtor/mês** (1 msg/dia todo dia). Na prática é menos:
 produtor sem evento no dia **não recebe nada**.
 
+> Com a **decisão de ir Meta direto** (seção 7.1), a coluna Twilio é **R$ 0** — o custo
+> cai para só a taxa Meta (~R$ 135 / R$ 675 / R$ 1.350 por mês). A coluna Twilio fica
+> como teto de referência caso um dia se opte por BSP.
+
 ### 8.3 Custos fixos e de implementação
 
 A parte cara **não** são as mensagens — é construir a ferramenta.
@@ -257,7 +309,7 @@ A parte cara **não** são as mensagens — é construir a ferramenta.
 |---|---|---|
 | Conta WhatsApp Business + verificação Meta | grátis | exige verificação do negócio (CNPJ, documentação) |
 | Número de telefone dedicado | baixo | número do remetente |
-| Assinatura do provedor | varia | Twilio: por uso, sem mensalidade. 360dialog: mensalidade fixa |
+| Assinatura de provedor (BSP) | R$ 0 na v1 | decidido **Meta direto, sem BSP** (seção 7.1) |
 | Backend + banco + cron + webhook | infra mensal | ex.: Supabase plano gratuito; pago a partir de ~US$ 25/mês |
 | **Desenvolvimento** | maior custo | ingestão, modelo de dados, job diário, envio, webhook |
 | Homologação do template Utility | grátis | aprovação leva de horas a poucos dias |
@@ -284,16 +336,25 @@ A parte cara **não** são as mensagens — é construir a ferramenta.
 
 ---
 
-## 10. Decisões em aberto (próximos passos)
+## 10. Decisões tomadas e em aberto
 
-1. **Stack do backend.** Ainda não decidida. Um caminho de baixo atrito para este
-   desenho (Postgres + cron + função de envio + webhook) é **Supabase**
-   (banco gerenciado, cron agendado e edge functions) — mas qualquer stack com banco
-   relacional e um agendador atende.
-2. **Fuso e horário de envio** por produtor (default 18h).
-3. **Formato e rota do deep link** (app nativo vs web).
-4. **Definição de "evento relevante"** por tipo (o que merece avisar e o que não).
-5. **Homologação do template Utility** junto ao provedor escolhido.
+**Decididas:**
+
+- **Plataforma de backend: Supabase** (Postgres + pg_cron + Edge Functions + RLS).
+  Conta Supabase já existente.
+- **Envio: WhatsApp Cloud API direto, sem BSP** (seção 7.1).
+- **Comportamento: resumo diário** (seção 5).
+- **Onde fica o código:** **repositório próprio do backend** (separado da homepage
+  institucional `homepage_terranexa`). Este documento de arquitetura mora hoje na
+  homepage, mas a implementação vai para o repo do backend.
+
+**Em aberto:**
+
+1. **Fuso e horário de envio** por produtor (default 18h).
+2. **Formato e rota do deep link** (app nativo vs web).
+3. **Definição de "evento relevante"** por tipo (o que merece avisar e o que não).
+4. **Homologação do template Utility** na Meta.
+5. **Origem dos dados de produtor/talhão** enquanto o app de campo não existe (seed/ingestão de teste).
 
 ---
 
