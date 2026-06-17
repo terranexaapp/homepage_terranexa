@@ -219,7 +219,62 @@ em vez de uma por talhão/evento. Utility é a categoria mais barata.
 
 ---
 
-## 8. Conformidade (Meta + LGPD)
+## 8. Custos e estimativas
+
+> Valores de referência de **2026**. A Meta reajusta a tabela periodicamente —
+> confirmar na fonte oficial antes de fechar contrato. A **estrutura** não muda.
+
+### 8.1 Por mensagem (resumo diário = template Utility)
+
+| Item | Valor (Brasil, 2026) |
+|---|---|
+| Meta — mensagem **Utility** | **R$ 0,04 a R$ 0,05** |
+| Meta — Utility dentro da janela de 24h (produtor respondeu) | **grátis** (margem do provedor ainda incide) |
+| Margem **Twilio** | ~US$ 0,005 (~**R$ 0,03**) por mensagem, sobre a taxa Meta |
+| Margem **360dialog** | **assinatura mensal fixa**, repassa a taxa Meta sem margem por mensagem |
+| **Combinado Meta + Twilio** | ~**R$ 0,07 a R$ 0,08** por mensagem |
+
+Comparativo de categorias (por que Utility é a escolha certa): Authentication custa
+R$ 0,15–0,19 e Marketing R$ 0,31–0,38. **Utility é a mais barata**, e a Meta aplica
+**descontos por volume** (volume tiers) a Utility a partir de 2026.
+
+### 8.2 Estimativa mensal (~30 mensagens por produtor/mês)
+
+| Produtores | Mensagens/mês | Meta (~R$0,045) | Twilio (~R$0,03) | **Total/mês** |
+|---|---|---|---|---|
+| 100 | 3.000 | ~R$ 135 | ~R$ 90 | **~R$ 225** |
+| 500 | 15.000 | ~R$ 675 | ~R$ 450 | **~R$ 1.125** |
+| 1.000 | 30.000 | ~R$ 1.350 | ~R$ 900 | **~R$ 2.250** |
+
+Pior caso ~**R$ 2,25 por produtor/mês** (1 msg/dia todo dia). Na prática é menos:
+produtor sem evento no dia **não recebe nada**.
+
+### 8.3 Custos fixos e de implementação
+
+A parte cara **não** são as mensagens — é construir a ferramenta.
+
+| Item | Custo | Observação |
+|---|---|---|
+| Conta WhatsApp Business + verificação Meta | grátis | exige verificação do negócio (CNPJ, documentação) |
+| Número de telefone dedicado | baixo | número do remetente |
+| Assinatura do provedor | varia | Twilio: por uso, sem mensalidade. 360dialog: mensalidade fixa |
+| Backend + banco + cron + webhook | infra mensal | ex.: Supabase plano gratuito; pago a partir de ~US$ 25/mês |
+| **Desenvolvimento** | maior custo | ingestão, modelo de dados, job diário, envio, webhook |
+| Homologação do template Utility | grátis | aprovação leva de horas a poucos dias |
+
+### 8.4 Leitura rápida
+
+- **Mensagens são baratas:** ~R$ 0,07–0,08 cada; ~R$ 225/mês para 100 produtores.
+- **O custo real é construir o backend** (que ainda não existe), não o envio.
+- **Twilio:** paga por uso, sem mensalidade — ideal para começar pequeno.
+  **360dialog:** mensalidade fixa, compensa em volume maior.
+
+> **Fontes:** Meta WhatsApp Business Platform Pricing; Message Central (Brasil 2026);
+> Twilio WhatsApp Pricing; EngageLab Pricing Guide 2026.
+
+---
+
+## 9. Conformidade (Meta + LGPD)
 
 - **Opt-in registrado** antes de qualquer envio (tabela `consentimento_whatsapp`).
 - **Opt-out fácil:** revogar muda `status` para `revogado`; o job passa a ignorar.
@@ -229,7 +284,7 @@ em vez de uma por talhão/evento. Utility é a categoria mais barata.
 
 ---
 
-## 9. Decisões em aberto (próximos passos)
+## 10. Decisões em aberto (próximos passos)
 
 1. **Stack do backend.** Ainda não decidida. Um caminho de baixo atrito para este
    desenho (Postgres + cron + função de envio + webhook) é **Supabase**
@@ -242,7 +297,7 @@ em vez de uma por talhão/evento. Utility é a categoria mais barata.
 
 ---
 
-## 10. Resumo de uma frase
+## 11. Resumo de uma frase
 
 Cada item sincronizado vira um **evento** ligado a produtor+talhão; um **cron diário**
 consolida os eventos do dia em **uma mensagem Utility por produtor** com um **deep link**
