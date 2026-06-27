@@ -261,11 +261,11 @@ function AssinarPlanos({ navigate }) {
     <main className="assinar" id="conteudo">
       <div className="container">
         <div className="assinar-head">
-          <span className="plan-pill"><Check /> {ciclo === "mensal" ? "1º mês por R$ 9,99" : "Plano anual, cobrança única no ano"}</span>
+          <span className="plan-pill"><Check /> {ciclo === "mensal" ? "30 dias grátis" : "30 dias grátis no cartão"}</span>
           <h1>Escolha o plano ideal para a sua operação.</h1>
           <p>{ciclo === "mensal"
-            ? "No plano mensal, novos usuários pagam R$ 9,99 no primeiro mês; a partir do segundo, o valor do plano. Selecione o plano e a faixa de área da sua fazenda."
-            : "Selecione o plano e a faixa de área da sua fazenda. No plano anual a cobrança é feita na contratação, sem período de teste."}</p>
+            ? "Novos usuários começam com 30 dias grátis; a primeira cobrança só no fim do período. Selecione o plano e a faixa de área da sua fazenda."
+            : "Selecione o plano e a faixa de área da sua fazenda. No cartão, novos usuários têm 30 dias grátis; no Pix ou boleto, a cobrança do ano é à vista."}</p>
 
           <div className="ciclo-toggle" role="group" aria-label="Ciclo de cobrança">
             <button type="button" className={ciclo === "mensal" ? "is-active" : ""} aria-pressed={ciclo === "mensal"} onClick={() => setCiclo("mensal")}>Mensal</button>
@@ -274,7 +274,7 @@ function AssinarPlanos({ navigate }) {
             </button>
           </div>
           {ciclo === "anual" && (
-            <p className="ciclo-nota">O plano anual é cobrado integral na contratação. O primeiro mês por R$ 9,99 vale apenas no plano mensal e para novos usuários.</p>
+            <p className="ciclo-nota">No cartão, novos usuários têm 30 dias grátis e a primeira cobrança (do ano) cai no fim do período. No Pix ou boleto, o pagamento do ano é à vista, sem período grátis.</p>
           )}
         </div>
 
@@ -335,7 +335,7 @@ function AssinarPlanos({ navigate }) {
               <button type="button" className="button button-gold assinar-continue" onClick={continuar} disabled={!selecao}>
                 Continuar <span aria-hidden="true">→</span>
               </button>
-              <p className="assinar-note">{ciclo === "mensal" ? "Primeiro mês por R$ 9,99 para novos usuários, depois o valor do plano. Cancele quando quiser." : "Cobrança anual integral na contratação, sem o 1º mês promocional. Acesso garantido pelo ano."}</p>
+              <p className="assinar-note">{ciclo === "mensal" ? "30 dias grátis para novos usuários, depois o valor do plano. Cancele quando quiser." : "30 dias grátis no cartão para novos usuários; no Pix ou boleto, o ano é pago à vista."}</p>
             </div>
           </>
         )}
@@ -490,13 +490,13 @@ function AssinarCadastro({ navigate }) {
         </div>
 
         <p className="cadastro-eyebrow">Crie sua conta</p>
-        <h1>{ehAnual ? "Ative sua conta TerraNexa" : "Comece por R$ 9,99 no primeiro mês"}</h1>
+        <h1>{ehAnual ? "Ative sua conta TerraNexa" : "Comece com 30 dias grátis"}</h1>
         <p className="cadastro-sub">
           {avulso
             ? "Preencha seus dados e gere o pagamento do ano via Pix ou boleto, em ambiente seguro do Asaas. Assim que o pagamento for confirmado, você recebe um e-mail para definir sua senha e o acesso é liberado."
             : ehAnual
-              ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. A cobrança anual é integral na contratação, sem o primeiro mês promocional de R$ 9,99 (que vale só no mensal), e o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
-              : "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. Você paga R$ 9,99 no primeiro mês e, a partir do segundo, o valor do plano. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso."}
+              ? "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. Novos usuários têm 30 dias grátis e a primeira cobrança (do ano) cai no fim do período; o acesso é liberado na confirmação. Depois você recebe um e-mail para definir sua senha de acesso."
+              : "Preencha seus dados e cadastre o cartão no próximo passo, em ambiente seguro do Asaas. Novos usuários têm 30 dias grátis e a primeira cobrança só no fim do período. Depois de confirmar, você recebe um e-mail para definir sua senha de acesso."}
         </p>
 
         {sucesso ? (
@@ -531,7 +531,7 @@ function AssinarCadastro({ navigate }) {
                 <p className="forma-nota">
                   {avulso
                     ? "Pix ou boleto: pagamento único do ano, sem renovação automática. Pagando por Pix, o acesso libera na hora; por boleto, após a compensação (1 a 3 dias úteis)."
-                    : "Renovação automática no cartão. A cobrança anual é integral na contratação, sem o 1º mês de R$ 9,99 (que vale só no mensal)."}
+                    : "No cartão, novos usuários têm 30 dias grátis e a primeira cobrança (do ano) cai no fim do período. Depois, renovação automática anual."}
                 </p>
               </div>
             )}
