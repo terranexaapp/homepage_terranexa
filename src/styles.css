@@ -62,7 +62,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .main-navigation { display: flex; align-items: center; justify-content: center; gap: 34px; font-size: 14px; font-weight: 650; }
 .main-navigation > a, .nav-group > button { border: 0; background: transparent; color: #dce6dd; cursor: pointer; padding: 30px 0; transition: color .2s ease; }
 .main-navigation > a:hover, .nav-group > button:hover { color: var(--green); }
-.nav-platform-access { display: none; }
 .nav-planos-mobile { display: none; }
 .nav-entrar-mobile { display: none; }
 .nav-group { position: relative; }
@@ -314,12 +313,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .main-navigation > a, .nav-group > button { width: 100%; justify-content: space-between; border-radius: 10px; padding: 14px; text-align: left; }
   .nav-dropdown { position: static; display: none; width: 100%; visibility: visible; border: 0; box-shadow: none; background: rgba(255, 255, 255, 0.035); opacity: 1; transform: none; }
   .nav-group.is-open .nav-dropdown { display: grid; transform: none; }
-  .main-navigation .nav-platform-access {
-    display: flex; justify-content: center; margin-top: 8px; padding: 15px;
-    border-radius: 12px; background: linear-gradient(135deg, var(--gold-light), #d99128);
-    color: #13200e; font-weight: 800;
-  }
-  .main-navigation .nav-platform-access:hover { color: #13200e; }
   .main-navigation .nav-entrar-mobile {
     display: flex; justify-content: center; margin-top: 8px; padding: 14px;
     border: 1px solid var(--line); border-radius: 12px; cursor: pointer;
