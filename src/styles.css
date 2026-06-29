@@ -64,6 +64,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .main-navigation > a:hover, .nav-group > button:hover { color: var(--green); }
 .nav-platform-access { display: none; }
 .nav-planos-mobile { display: none; }
+.nav-entrar-mobile { display: none; }
 .nav-group { position: relative; }
 .nav-group > button { display: inline-flex; align-items: center; gap: 7px; }
 .nav-group > button svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; transition: transform .2s ease; }
@@ -319,6 +320,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
     color: #13200e; font-weight: 800;
   }
   .main-navigation .nav-platform-access:hover { color: #13200e; }
+  .main-navigation .nav-entrar-mobile {
+    display: flex; justify-content: center; margin-top: 8px; padding: 14px;
+    border: 1px solid var(--line); border-radius: 12px; cursor: pointer;
+    background: rgba(255, 255, 255, 0.05); color: #dce6dd; font-weight: 700; font-size: 14px;
+  }
+  .main-navigation .nav-entrar-mobile:hover { color: var(--green); }
   .main-navigation .nav-planos-mobile {
     display: flex; justify-content: center; margin-top: 6px; padding: 15px;
     border: 0; border-radius: 12px; cursor: pointer;
