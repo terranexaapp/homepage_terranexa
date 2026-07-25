@@ -13,6 +13,7 @@
     { "source": "/termos", "destination": "/termos.html" },
     { "source": "/privacidade", "destination": "/privacidade.html" },
     { "source": "/cookies", "destination": "/cookies.html" },
+    { "source": "/excluir-conta", "destination": "/excluir-conta.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
