@@ -27,7 +27,7 @@
     <main class="legal">
       <p class="eyebrow">Privacidade</p>
       <h1>Política de Privacidade</h1>
-      <p class="updated">Última atualização: 25 de julho de 2026 &nbsp;·&nbsp; Vigência: a partir desta data</p>
+      <p class="updated">Última atualização: 30 de julho de 2026 &nbsp;·&nbsp; Vigência: a partir desta data</p>
 
       <p class="intro">A presente Política de Privacidade explica como o <strong>TerraNexa</strong> coleta, utiliza, armazena, compartilha e protege dados pessoais de usuários do nosso site, da plataforma web e do <strong>aplicativo Android</strong>, além de painéis, formulários, relatórios e demais serviços relacionados à gestão agrícola.</p>
       <p>O TerraNexa respeita a privacidade dos usuários e trata dados pessoais de forma transparente, segura e compatível com a Lei Geral de Proteção de Dados Pessoais, <strong>LGPD (Lei nº 13.709/2018)</strong>.</p>
@@ -105,7 +105,7 @@
         <li>Registro de chuva, pragas, doenças, plantas daninhas ou operações agrícolas;</li>
         <li>Geração de mapas e relatórios.</li>
       </ul>
-      <p><strong>Localização em segundo plano:</strong> no aplicativo Android, quando você inicia uma sessão de monitoramento, o app pode continuar registrando a trilha de GPS mesmo com a tela bloqueada ou com o app em segundo plano. Esse uso está detalhado na <a href="#segundo-plano">seção 5</a>.</p>
+      <p><strong>Localização em segundo plano:</strong> no aplicativo Android, quando você inicia uma sessão de monitoramento, o app pode continuar registrando a trilha de GPS <strong>mesmo com a tela bloqueada, com o aplicativo fechado ou fora de uso</strong>. Esse uso depende de um aviso e de um consentimento dados dentro do próprio app, e está detalhado na <a href="#segundo-plano">seção 5</a>.</p>
       <p>A coleta de localização depende sempre de autorização concedida por você no dispositivo ou no navegador, e pode ser revogada a qualquer momento nas configurações do sistema.</p>
 
       <h3>3.5 Câmera e fotos</h3>
@@ -145,14 +145,35 @@
       </div>
       <p>Quando o tratamento depender de consentimento, você poderá revogá-lo a qualquer momento pelos meios descritos nesta Política ou nas configurações do seu dispositivo.</p>
 
-      <h2 id="segundo-plano">5. Localização em segundo plano no aplicativo</h2>
+      <h2 id="segundo-plano">5. Localização em segundo plano e permissões do aplicativo Android</h2>
       <div class="destaque">
-        <p>O técnico em campo percorre a lavoura, muitas vezes de moto, e precisa que a <strong>trilha de GPS</strong> continue sendo gravada mesmo quando a tela é bloqueada ou o aparelho é guardado no bolso. Por isso, e <strong>somente durante uma sessão de monitoramento iniciada por você</strong>, o aplicativo usa a <strong>localização em segundo plano</strong>, exibindo uma notificação persistente enquanto a coleta está ativa.</p>
-        <p>Esses dados de localização são usados exclusivamente para construir o caminhamento e posicionar os registros nos talhões corretos. <strong>Não</strong> usamos a localização para publicidade, não a vendemos e não a compartilhamos com terceiros para essa finalidade.</p>
-        <p>Você pode interromper a coleta a qualquer momento finalizando o monitoramento, ou revogar a permissão de localização nas configurações do Android, o que desativa o registro automático da trilha sem impedir o uso das demais funcionalidades.</p>
+        <p><strong>Qual dado é coletado:</strong> durante uma sessão de monitoramento iniciada por você, o aplicativo Android coleta a sua <strong>localização precisa (GPS)</strong> de forma contínua, <strong>inclusive com a tela bloqueada, com o aplicativo fechado ou fora de uso</strong>.</p>
+        <p><strong>Para que é usado:</strong> essas posições formam a <strong>trilha do caminhamento</strong>, o traçado do percurso feito na lavoura, e posicionam cada ocorrência registrada no talhão correto. O técnico percorre a área, muitas vezes de moto, e precisa que a trilha continue sendo gravada quando o aparelho é guardado no bolso ou a tela é bloqueada.</p>
+        <p><strong>Aviso e consentimento dentro do app:</strong> antes de qualquer pedido de permissão do Android, o aplicativo exibe um aviso em tela explicando essa coleta, e o rastreio em segundo plano só é acionado se você tocar em <strong>"Permitir em segundo plano"</strong>. Se você escolher <strong>"Agora não"</strong>, o monitoramento continua funcionando: os pontos são registrados normalmente, apenas o traçado do percurso deixa de ser gravado com a tela bloqueada.</p>
+        <p><strong>Enquanto a coleta está ativa:</strong> o Android exibe uma <strong>notificação persistente</strong> ("Registrando a trilha do monitoramento") durante todo o período, para que você saiba que ela está em curso. A coleta ocorre apenas entre o início e o encerramento do monitoramento, e nunca fora dele.</p>
+        <p><strong>Como interromper:</strong> encerre o monitoramento no aplicativo, ou revogue a permissão em Configurações do Android, Apps, TerraNexa, Permissões. Revogar desativa o registro automático da trilha sem impedir o uso das demais funcionalidades.</p>
+        <p><strong>Uso e compartilhamento:</strong> a localização é usada exclusivamente para construir o caminhamento e georreferenciar os registros agrícolas, ficando vinculada à sua conta e à fazenda correspondente. <strong>Não</strong> usamos localização para publicidade, <strong>não</strong> a vendemos e <strong>não</strong> a compartilhamos com terceiros para essas finalidades. Ela é armazenada apenas nos operadores de infraestrutura listados na <a href="#operadores">seção 6</a>, e é eliminada junto com a visita de monitoramento ou com a exclusão da sua conta, conforme as seções <a href="#offline">8</a> e 10.</p>
       </div>
 
-      <h2>6. Compartilhamento de dados e operadores</h2>
+      <h3>5.1 Permissões solicitadas pelo aplicativo Android</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Permissão</th><th>Para que é usada</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Localização aproximada e precisa (<code>ACCESS_COARSE_LOCATION</code>, <code>ACCESS_FINE_LOCATION</code>)</td><td>Posicionar você no mapa, associar cada registro ao talhão correto e marcar os pontos de monitoramento</td></tr>
+            <tr><td>Localização em segundo plano (<code>ACCESS_BACKGROUND_LOCATION</code>)</td><td>Continuar gravando a trilha do caminhamento com a tela bloqueada, o app fechado ou fora de uso, somente durante um monitoramento e mediante o consentimento descrito acima</td></tr>
+            <tr><td>Serviço em primeiro plano de localização (<code>FOREGROUND_SERVICE</code>, <code>FOREGROUND_SERVICE_LOCATION</code>)</td><td>Manter o GPS ativo durante o monitoramento, com a notificação persistente visível</td></tr>
+            <tr><td>Câmera (<code>CAMERA</code>)</td><td>Fotografar pragas, doenças e ocorrências de campo, apenas quando você aciona a câmera</td></tr>
+            <tr><td>Manter o aparelho acordado (<code>WAKE_LOCK</code>)</td><td>Evitar que o celular durma no meio de uma sincronização e a interrompa</td></tr>
+            <tr><td>Acesso à internet (<code>INTERNET</code>)</td><td>Sincronizar os seus dados com os servidores do TerraNexa</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>O aplicativo não solicita permissões de contatos, agenda, SMS, chamadas, microfone ou lista de aplicativos instalados.</p>
+
+      <h2 id="operadores">6. Compartilhamento de dados e operadores</h2>
       <p><strong>O TerraNexa não vende dados pessoais dos usuários.</strong> Compartilhamos dados apenas com <strong>operadores</strong> que prestam serviços de infraestrutura necessários ao funcionamento do Serviço, sob obrigações de confidencialidade e segurança:</p>
       <div class="table-wrap">
         <table>
